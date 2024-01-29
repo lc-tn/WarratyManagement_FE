@@ -1,0 +1,20 @@
+import { Component } from '@angular/core';
+import { tokenGetter } from '../app.module';
+
+@Component({
+  selector: 'app-home',
+  templateUrl: './home.component.html',
+  styleUrl: './home.component.scss'
+})
+export class HomeComponent {
+
+  constructor(){}
+  ngOnInit(): void {
+  }
+
+  public Logout(){
+    localStorage.clear();
+  }
+}
+
+

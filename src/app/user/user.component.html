@@ -1,0 +1,29 @@
+<app-home></app-home>
+<form [formGroup]="userForm">
+    <table class="data">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Address</th>
+                <th>Role</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody formArrayName="users">
+            <tr *ngFor="let user of users.controls; let i = index" [formGroupName]="i">
+                <td><input type="text" formControlName="id" readonly></td>
+                <td><input type="text" formControlName="name"></td>
+                <input type="text" formControlName="password" hidden>
+                <td><input type="text" formControlName="email"></td>
+                <td><input type="text" formControlName="phone"></td>
+                <td><input type="text" formControlName="address"></td>
+                <td><input type="text" formControlName="role"></td>
+                <td><button type="submit" (click)="onSubmit(i)">Edit</button></td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+  

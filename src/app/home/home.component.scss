@@ -1,0 +1,28 @@
+ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    background-color: #333; /* Background color for the menu */
+    overflow: hidden;
+  }
+  
+  li {
+    float: left;
+  }
+  
+  a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+  }
+  
+  a:hover {
+    background-color: #555; /* Darker background color on hover */
+  }
+  
+  .active {
+    background-color: #4CAF50; /* Highlight color for the active link */
+  }
+  
