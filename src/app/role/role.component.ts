@@ -3,6 +3,9 @@ import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { HttpServerService } from '../Service/http-server.service';
 import { TransferServiceService } from '../Service/transfer-service.service';
 import { Router } from '@angular/router';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { Footer, MessageService } from 'primeng/api';
+import { PermissionComponent } from '../permission/permission.component';
 
 @Component({
   selector: 'app-role',
@@ -13,11 +16,15 @@ export class RoleComponent {
 
   public role!: Role;
   public roleList: Role[] = [];
+  // ref: DynamicDialogRef | undefined;
   
   constructor(private formBuilder: FormBuilder, 
               private httpService: HttpServerService,
               private transferService:TransferServiceService,
-              private router: Router) {
+              private router: Router,
+              private dialogService: DialogService
+              // private messageService: MessageService
+              ) {
     this.roleForm = this.formBuilder.group({
       roles: this.formBuilder.array([])
     });
@@ -59,6 +66,8 @@ export class RoleComponent {
     }, error => {
       console.error('Error creating warranty', error);
     });
+
+    
   }
 
   get roles(): FormArray {
@@ -73,6 +82,16 @@ export class RoleComponent {
     this.router.navigateByUrl('/permission');
   }
 
+  public show(i: number){
+    const roleGroup = this.roles.at(i) as FormGroup;
+    this.role = roleGroup.value;
+
+    this.transferService.setData(this.role);
+    const ref = this.dialogService.open(PermissionComponent, {
+      header: `Role: ${this.role.name}`,
+      width: '70%'
+  });
+  }
 }
 
 export interface Role{

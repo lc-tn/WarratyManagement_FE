@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { AuthService } from '../Service/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-sign-up',
@@ -10,8 +11,9 @@ import { AuthService } from '../Service/auth.service';
 export class SignUpComponent {
 
   public signUp! : SignUp;
+  value!: string
 
-  constructor(private authService: AuthService){}
+  constructor(private authService: AuthService, private router: Router){}
 
   public signUpForm: FormGroup = new FormGroup({
     username: new FormControl(''),
@@ -32,9 +34,10 @@ export class SignUpComponent {
     }
 
     this.authService.signUp(this.signUp).subscribe(response => {
-      console.log('Create user successfully', response);
+      alert('Create user successfully, login to continue');
+      this.router.navigateByUrl('/login');
     }, error => {
-      console.error('Error creating user', error);
+      alert('Something went wrong!');
     });
 
   }

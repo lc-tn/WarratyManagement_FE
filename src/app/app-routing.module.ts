@@ -8,6 +8,7 @@ import { SignUpComponent } from './sign-up/sign-up.component';
 import { RoleComponent } from './role/role.component';
 import { PermissionComponent } from './permission/permission.component';
 import { AuthGuardService } from './Service/auth-guard.service';
+import { DeviceComponent } from './device/device.component';
 
 const routes: Routes = [
   {path: '', redirectTo: '/login', pathMatch: 'full'},
@@ -18,6 +19,7 @@ const routes: Routes = [
   {path: 'signUp', component: SignUpComponent},
   {path: 'role', component: RoleComponent, canActivate: [AuthGuardService]},
   {path: 'permission', component: PermissionComponent, canActivate: [AuthGuardService]},
+  {path: 'device', component: DeviceComponent, canActivate: [AuthGuardService]},
 ];
 
 @NgModule({

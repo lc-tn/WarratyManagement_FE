@@ -1,21 +1,65 @@
 <section class="container">
     <div class="login-container">
-        <div class="circle circle-one"></div>
         <div class="form-container">
-            <img src="https://raw.githubusercontent.com/hicodersofficial/glassmorphism-login-form/master/assets/illustration.png"
-                alt="illustration" class="illustration" />
-            <h1 class="opacity">LOGIN</h1>
+            <div class="text-900 text-3xl font-medium mb-3" id="title">Register</div>
+            <div id="title">
+                <span class="text-600 font-medium line-height-3">Already have an account?</span>
+                <a class="font-medium no-underline ml-2 text-blue-500 cursor-pointer" routerLink="/login">Log in</a>
+            </div>
             <form [formGroup]="signUpForm" (ngSubmit)="onSubmit()">
-                <input type="text" placeholder="USERNAME" formControlName="username" />
-                <input type="password" placeholder="PASSWORD" formControlName="password" />
-                <input type="text" placeholder="NAME" formControlName="name" />
-                <input type="text" placeholder="EMAIL" formControlName="email" />
-                <input type="text" placeholder="PHONE" formControlName="phone" />
-                <input type="text" placeholder="ADDRESS" formControlName="address" />
-                <button type="submit" class="opacity">SUBMIT</button>
-            </form>           
+                <div class="flex flex-column gap-2" id="register">
+                    <input pInputText aria-describedby="username-help" placeholder="Username"
+                        formControlName="username" />
+                    <small style="color: rgb(163, 163, 163);" id="username-help">Username must
+                        contain characters and numbers.</small>
+                </div>
+                <!-- <div class="flex flex-column gap-2" id="register">
+                    <input pInputText type="password" aria-describedby="username-help" placeholder="Password"
+                        formControlName="password" />
+                    <small style="color: rgb(163, 163, 163);" id="username-help">Password must
+                        contain upper, special
+                        characters and numbers.</small>
+                </div> -->
+
+                <p-password [(ngModel)]="value" placeholder="Password" styleClass="custom-password" formControlName="password"
+                        [inputStyle]="{'padding':'14.5px', 'margin-bottom':'10px', 'width':'289.87px', 'background-color': '#9191911f', 'border': 'none'}">
+                        <ng-template pTemplate="header">
+                            <h6>Enter a password</h6>
+                        </ng-template>
+                        <ng-template pTemplate="footer">
+                            <!-- <p-divider></p-divider> -->
+                            <p class="mt-2">Suggestions</p>
+                            <ul class="pl-2 ml-2 mt-0" style="line-height: 1.5; padding: 10px;">
+                                <li>At least one lowercase</li>
+                                <li>At least one uppercase</li>
+                                <li>At least one numeric</li>
+                                <li>Minimum 8 characters</li>
+                            </ul>
+                        </ng-template>
+                        </p-password>
+
+                <div class="flex flex-column gap-2" id="register">
+                    <input pInputText aria-describedby="username-help" placeholder="Name" formControlName="name" />
+                </div>
+                    <div class="flex flex-column gap-2" id="register">
+                        <input pInputText aria-describedby="username-help" placeholder="Email"
+                            formControlName="email" />
+                    </div>
+
+                    <div class="flex flex-column gap-2" id="register">
+                        <input pInputText aria-describedby="username-help" placeholder="Phone"
+                            formControlName="phone" />
+                    </div>
+                    <div class="flex flex-column gap-2" id="register">
+                        <input pInputText aria-describedby="username-help" placeholder="Address"
+                            formControlName="address" />
+                    </div>
+                    <div style="display: flex; justify-content: center; ">
+                        <!-- <button type="submit" pButton pRipple (click)="onSubmit()" label="Success" class="p-button-success">Register</button> -->
+                        <p-button label="Register" type="submit"></p-button>
+                    </div>
+            </form>
         </div>
-        <div class="circle circle-two"></div>
     </div>
     <div class="theme-btn-container"></div>
 </section>

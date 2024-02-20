@@ -1,0 +1,49 @@
+<div class="all">
+    <app-home></app-home>
+        <div>
+            <div class="text-900 text-2xl font-medium mb-3" id="title">QUẢN LÝ DANH MỤC THIẾT BỊ</div>
+            <div class="form-container">
+                
+                <form [formGroup]="deviceForm" (ngSubmit)="onSubmit()">
+                    <div class="add_device">
+                        <div class="flex flex-column gap-2" id="register">
+                            <input pInputText aria-describedby="username-help" placeholder="Name" formControlName="name" />
+                        </div>
+                        <div class="flex flex-column gap-2" id="register">
+                            <input pInputText aria-describedby="username-help" placeholder="Description"
+                                formControlName="description" />
+                        </div>
+    
+                        <div class="flex flex-column gap-2" id="register">
+                            <input pInputText aria-describedby="username-help" placeholder="Status" formControlName="status"
+                                hidden />
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; justify-content: center; ">
+                        <p-button label="Add" type="submit"></p-button>
+                    </div>
+                </form>
+
+            </div>
+
+            <p-table [value]="deviceList" [tableStyle]="{ 'min-width': '50rem'}">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Id</th>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Status</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-device>
+                    <tr>
+                        <td>{{ device.id }}</td>
+                        <td>{{ device.name }}</td>
+                        <td>{{ device.description }}</td>
+                        <td>{{ device.status }}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+</div>

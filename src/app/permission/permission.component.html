@@ -1,12 +1,29 @@
 <!-- <app-home></app-home> -->
-<app-home></app-home>
-<h3>Role: {{role.name}}</h3>
-<form [formGroup]="permissionForm">
 
+<!-- <h3>Role: {{role.name}}</h3> -->
+<form [formGroup]="permissionForm">
+    <!-- <p-table [value]="permissionListByRole" [tableStyle]="{ 'min-width': '50rem' }">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Code</th>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Quantity</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-product>
+            <tr>
+                <td>{{ product.code }}</td>
+                <td>{{ product.name }}</td>
+                <td>{{ product.category }}</td>
+                <td>{{ product.quantity }}</td>
+            </tr>
+        </ng-template>
+    </p-table> -->
+    
     <table class="data">
         <thead>
             <tr>
-                <th>Id</th>
                 <th>Permission</th>
                 <th></th>
             </tr>
@@ -14,7 +31,7 @@
         <tbody formArrayName="permissions">
             <tr *ngFor="let permission of permissions.controls; let i = index" [formGroupName]="i">
                 
-                <td><input type="text" formControlName="permissionId" readonly></td>
+                <input type="text" formControlName="permissionId" hidden>
                 <td><input type="text" formControlName="name"></td>
                 <td><input type="checkbox" formControlName="choice"></td>
                 <button type="submit" (click)="onSubmit(permissions)">Edit</button>

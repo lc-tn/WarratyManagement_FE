@@ -1,21 +1,44 @@
 <section class="container">
     <div class="login-container">
-        <div class="circle circle-one"></div>
         <div class="form-container">
-            <img src="https://raw.githubusercontent.com/hicodersofficial/glassmorphism-login-form/master/assets/illustration.png"
-                alt="illustration" class="illustration" />
-            <h1 class="opacity">LOGIN</h1>
-            <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-                <input type="text" placeholder="USERNAME" formControlName="username" />
-                <input type="password" placeholder="PASSWORD" formControlName="password" />
-                <button type="submit" class="opacity">SUBMIT</button>
-            </form>           
-            <div class="register-forget opacity">
-                <a routerLink="/signUp">REGISTER</a>
-                <a>HOME</a>
+            <div class="text-900 text-3xl font-medium mb-3" id="register">Welcome Back</div>
+            <div id="register">
+                <span class="text-600 font-medium line-height-3">Don't have an account?</span>
+                <a class="font-medium no-underline ml-2 text-blue-500 cursor-pointer" routerLink="/signUp">Create
+                    today!</a>
             </div>
+            <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+                <div class="flex flex-column gap-2">
+                    <input pInputText aria-describedby="username-help" placeholder="Username" formControlName="username" />
+                    <small style="color: rgb(163, 163, 163); margin-bottom: 10px;" id="username-help">Username must contain characters and numbers.</small>
+                    
+                        <!-- <p-password [(ngModel)]="value" placeholder="Password" styleClass="custom-password" formControlName="password"
+                        [inputStyle]="{'padding':'14.5px', 'width':'289.87px', 'background-color': '#9191911f', 'border': 'none'}">
+                            <ng-template pTemplate="header">
+                                <h6>Pick a password</h6>
+                            </ng-template>
+                            <ng-template pTemplate="footer">
+                                <p class="mt-2">Suggestions</p>
+                                <ul class="pl-2 ml-2 mt-0" style="line-height: 1.5">
+                                    <li>At least one lowercase</li>
+                                    <li>At least one uppercase</li>
+                                    <li>At least one numeric</li>
+                                    <li>Minimum 8 characters</li>
+                                </ul>
+                            </ng-template>
+                        </p-password> -->
+                    
+
+                    <input pInputText type="password" aria-describedby="username-help" placeholder="Password" formControlName="password" />
+                    <small style="color: rgb(163, 163, 163);" id="username-help">Password must contain upper, special
+                        characters and numbers.</small>
+                </div>
+
+                <div style="display: flex; justify-content: center;">
+                    <p-button label="Login" type="submit" [style]="{'padding':'10px 15px'}"></p-button>
+                </div>
+            </form>
         </div>
-        <div class="circle circle-two"></div>
     </div>
     <div class="theme-btn-container"></div>
 </section>

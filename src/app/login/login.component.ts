@@ -1,10 +1,8 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../Service/auth.service';
 import { Router } from '@angular/router';
-import { NgToastService } from 'ng-angular-popup';
-import { HttpErrorResponse } from '@angular/common/http';
-import { JwtHelperService } from '@auth0/angular-jwt';
+import { TransferServiceService } from '../Service/transfer-service.service';
 
 @Component({
   selector: 'app-login-component',
@@ -15,6 +13,7 @@ export class LoginComponentComponent {
   [x: string]: any;
 
   public login!: Login;
+  value!: string;
   private token!: string;
   validateControl: any;
   hasError: any;
@@ -26,7 +25,8 @@ export class LoginComponentComponent {
 
   constructor(
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private transferService:TransferServiceService
   ) { }
 
   public loginForm: FormGroup = new FormGroup({
@@ -39,22 +39,23 @@ export class LoginComponentComponent {
       username: this.loginForm.get('username')?.value,
       password: this.loginForm.get('password')?.value
     });
-    console.log(this.login);
 
-    this.authService.login(this.login).subscribe((res:any) => {
-      if(res){
-        // console.log(res.token);
-          alert('Login successfully');
-          localStorage.setItem('loginToken', res);
-          this.router.navigateByUrl('/home');
-        }
-        else{
-          alert("Login unsuccessfully");
-        }
-      })
+    this.authService.login(this.login).subscribe((res: any) => {
+      if (res) {
+        localStorage.setItem('loginToken', res);
+        localStorage.setItem('username', this.login.username);
+        this.router.navigateByUrl('/home');
+      }
+      else {
+        alert("Login unsuccessfully");
+      }
+    })
   }
-
   public ngOnInit(): void {
+    const token = localStorage.getItem('loginToken');
+    if (token){
+      this.router.navigateByUrl('/home');
+    }
   }
 }
 
@@ -63,7 +64,7 @@ export interface Login {
   password: string
 }
 
-export interface AuthResponse{
+export interface AuthResponse {
   isAuthenticated: boolean,
   errorMessage: string,
   token: string

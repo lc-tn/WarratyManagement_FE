@@ -9,7 +9,7 @@ import { HttpServerService } from '../Service/http-server.service';
 })
 export class UserComponent {
   public user!: User;
-  public userList: User[] = [];
+  public userList!: User[];
 
   constructor(private formBuilder: FormBuilder, private httpService: HttpServerService) {
     this.userForm = this.formBuilder.group({
@@ -29,10 +29,12 @@ export class UserComponent {
 
   public ngOnInit() {
     this.httpService.getUser().subscribe((users) => {
+      this.userList = users;
       users.forEach(user => {
         const userGroup = this.formBuilder.group({
           id: [user.id],
           name: [user.name],
+          username: [user.username],
           password: [user.password],
           email: [user.email],
           phone: [user.phone],
@@ -48,6 +50,11 @@ export class UserComponent {
   get users(): FormArray {
     return this.userForm.get('users') as FormArray;
   }
+
+  public get usersArray(): any[] {
+    return this.users.controls.map(control => control.value);
+  }
+  
 
   onSubmit(i: number) {
     const userGroup = this.users.at(i) as FormGroup;
@@ -65,6 +72,7 @@ export interface User {
   id: string | null,
   password: string | null,
   name: string | null,
+  username: string | null,
   email: string | null,
   phone: string | null,
   address: string | null,

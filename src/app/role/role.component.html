@@ -1,28 +1,33 @@
-<app-home></app-home>
-<div [formGroup]="createRoleForm">
-    <label>Create new role:</label><input class="create" type="text" formControlName="creating">
-    <button type="submit" (click)="create()">Add</button>
+<div class="all">
+    <app-home></app-home>
+    <div [formGroup]="createRoleForm">
+        <label>Create new role:</label><input class="create" type="text" formControlName="creating">
+        <button type="submit" (click)="create()">Add</button>
+    </div>
+    <form [formGroup]="roleForm">
+        
+        <table class="data">
+            <thead>
+                <tr>
+                    <th>Role</th>
+                    <th>Permission</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody formArrayName="roles">
+                <tr *ngFor="let role of roles.controls; let i = index" [formGroupName]="i">
+                    <input type="text" formControlName="id" hidden>
+                    <td><input type="text" formControlName="name"></td>
+                    <!-- <td><button type="button" (click)="onSubmit(i)">Permission</button></td>
+                    <td><button type="submit" (click)="onSubmit(i)">Edit</button></td> -->
+                    <div class="card flex justify-content-center">
+                        <p-button (click)="show(i)" icon="pi pi-search" label="Thay đổi quyền"></p-button>
+                    </div>
+                </tr>
+                
+            </tbody>
+        </table>
+    </form>
 </div>
-<form [formGroup]="roleForm">
-    
-    <table class="data">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Permission</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody formArrayName="roles">
-            <tr *ngFor="let role of roles.controls; let i = index" [formGroupName]="i">
-                <td><input type="text" formControlName="id" readonly></td>
-                <td><input type="text" formControlName="name"></td>
-                <td><button type="button" (click)="onSubmit(i)">Permission</button></td>
-                <td><button type="submit" (click)="onSubmit(i)">Edit</button></td>
-            </tr>
-            
-        </tbody>
-    </table>
-</form>
+
   

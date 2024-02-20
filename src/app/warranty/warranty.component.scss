@@ -1,91 +1,148 @@
-.data {
+.all {
+  display: flex;
+  background-color: #f0f5f8;
+}
+
+.left_side {
+  padding: 15px;
+  margin: 15px;
+  background-color: white;
+  display: flex;
   width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
+  border-radius: 5px;
+}
 
-  th,
-  td {
-    //   border: 1px solid #ddd;
-    padding: 8px;
-    text-align: center;
-  }
+.list {
+  width: 35%;
+}
 
-  th {
-    background-color: #f2f2f2;
-  }
+.detail {
+  width: 65%;
+}
 
-  tbody {
-    tr:nth-child(even) {
-      background-color: #f9f9f9;
-    }
+.search {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  border: 1px solid rgb(213, 212, 212);
+  padding: 5px 10px;
+  border-radius: 10px;
+  width: 90%;
 
-    tr:hover {
-      background-color: #e0e0e0;
-    }
-  }
   input {
-    width: 100%;
-    padding: 8px;
-    box-sizing: border-box;
-    border-radius: 4px;
+    padding: 5px;
+    margin-left: 10px;
     border: none;
-    text-align: center;    
+    width: 100%;
+  }
+
+  input:focus {
+    outline: none;
+  }
+
+  input::placeholder {
+    color: #bababa;
+  }
+
+  i {
+    align-items: center;
   }
 }
 
-.form {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
+.warranty_list {
+  font-size: small;
+  display: flex;
+  border: 2px solid #c4e2fe;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+span {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-right: 10px;
+  color: #87bef2;
+  font-weight: 550;
+}
+
+span .content{
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+}
+
+.detail {
+  margin-left: 20px;
+}
+
+.detail_status {
+  display: flex;
+  margin: 20px 0;
+  justify-content: space-between;
+  align-items: center;
+
+  h4 {
+    font-size: small;
+    font-weight: bold;
+    color: rgb(66, 66, 66);
+    margin: 0;
+  }
+
+  span {
+    color: rgb(123, 123, 123);
+    margin: 0;
+    // align-items: center;
+  }
+}
+
+.detail_info {
+  margin-top: 30px;
+  display: flex;
+  justify-content: space-around;
 
   td {
     padding: 10px;
-    //   border: 1px solid #ddd;
   }
-
-  // label {
-  //   font-weight: bold;
-  //   display: block;
-  //   margin-bottom: 5px;
-  // }
-
-  input {
-    width: 100%;
-    padding: 8px;
-    box-sizing: border-box;
-    margin-bottom: 10px;
-    background-color: #f5f5f5;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 14px;
-    color: #333;
-  }
-
-  input[readonly] {
-    background-color: #ddd;
-    cursor: not-allowed;
-  }
-
-  tr:nth-child(even) {
-    background-color: #f9f9f9;
-  }
-
-  // tr:hover {
-  //   background-color: #e0e0e0;
-  // }
 }
 
-button {
-  background-color: #4caf50;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  display: block;
-  margin: 0 auto;
+.active {
+  background-color: #2e4ea7;
 }
 
-button:hover {
-  background-color: #45a049;
+.add_warranty {
+  width: 100%;
+
+  tbody {
+    td {
+      padding: 10px;
+
+      span {
+        font-weight: bold;
+      }
+
+      input[type="text"],
+      textarea {
+        width: 100%;
+        padding: 8px;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        resize: vertical;
+      }
+    }
+  }
+}
+
+.button {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+::ng-deep .p-dropdown .p-dropdown-filter-icon {
+  height: 100%;
+  align-items: center;
+  top: 0;
 }

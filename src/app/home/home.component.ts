@@ -8,8 +8,11 @@ import { tokenGetter } from '../app.module';
 })
 export class HomeComponent {
 
+  public username: string | undefined;
+
   constructor(){}
   ngOnInit(): void {
+    this.username = localStorage.getItem('username')?.toString();
   }
 
   public Logout(){
