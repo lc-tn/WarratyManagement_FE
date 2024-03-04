@@ -25,7 +25,9 @@ export class DeviceComponent {
       id: 0,
       name: this.deviceForm.get('name')?.value,
       description: this.deviceForm.get('description')?.value,
-      status: 'On process'
+      status: 'On process',
+      result: '',
+      userId: ''
     };
 
     this.httpService.createDevice(this.device).subscribe(response => {
@@ -47,5 +49,16 @@ export interface Device{
   id: number,
   name: string,
   description: string,
-  status: string
+  status: string,
+  result: string,
+  userId: string
+}
+
+export interface DeviceStatus{
+  name: string
+}
+
+export interface DeviceWarranty{
+  id: number,
+  description: string
 }

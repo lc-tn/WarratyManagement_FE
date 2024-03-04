@@ -49,6 +49,7 @@ export class RoleComponent {
           // permission: [role.permission]
         });
         this.roles.push(roleGroup);
+        // this.roleList = roles;
       });
     });
   }

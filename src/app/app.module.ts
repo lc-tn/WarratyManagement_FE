@@ -30,6 +30,11 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { DropdownModule } from 'primeng/dropdown';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { DataViewModule } from 'primeng/dataview';
+import { CreateWarrantyComponent } from './create-warranty/create-warranty.component';
+import { ConfirmPopupModule } from 'primeng/confirmpopup';
+import { DialogModule } from 'primeng/dialog';
 
 @NgModule({
   declarations: [
@@ -42,6 +47,7 @@ import { DropdownModule } from 'primeng/dropdown';
     RoleComponent,
     PermissionComponent,
     DeviceComponent,
+    CreateWarrantyComponent,
     // PBadgeComponent
   ],
   imports: [
@@ -70,7 +76,11 @@ import { DropdownModule } from 'primeng/dropdown';
     CalendarModule,
     InputTextModule,
     ToastModule,
-    DropdownModule
+    DropdownModule,
+    MultiSelectModule,
+    DataViewModule,
+    ConfirmPopupModule,
+    DialogModule
   ],
   providers: [
     {

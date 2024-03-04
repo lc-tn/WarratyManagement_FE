@@ -11,7 +11,6 @@
                 <tr>
                     <th>Role</th>
                     <th>Permission</th>
-                    <th></th>
                 </tr>
             </thead>
             <tbody formArrayName="roles">
@@ -20,14 +19,35 @@
                     <td><input type="text" formControlName="name"></td>
                     <!-- <td><button type="button" (click)="onSubmit(i)">Permission</button></td>
                     <td><button type="submit" (click)="onSubmit(i)">Edit</button></td> -->
-                    <div class="card flex justify-content-center">
-                        <p-button (click)="show(i)" icon="pi pi-search" label="Thay đổi quyền"></p-button>
-                    </div>
+                    <td>
+                        <div class="card flex justify-content-center">
+                            <p-button (click)="show(i)" icon="pi pi-search" label="Thay đổi quyền"></p-button>
+                        </div>
+                    </td>
                 </tr>
                 
             </tbody>
         </table>
     </form>
+
+    <!-- <p-table [value]="roleList" [tableStyle]="{ 'min-width': '50rem' }">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Role</th>
+                <th></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-role>
+            <tr>
+                <td>{{ role.name }}</td>
+                <td>
+                    <div class="card flex justify-content-center">
+                        <p-button (click)="show(role)" icon="pi pi-search" label="Thay đổi quyền"></p-button>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table> -->
 </div>
 
   

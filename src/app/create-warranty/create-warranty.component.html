@@ -1,0 +1,83 @@
+<div class="all">
+    <app-home></app-home>
+    <div class="left_side">
+        <div class="back" >
+            <i class="pi pi-angle-left" style="font-size: 1.2rem"></i>
+            <a (click)="back()">Quay lại</a>
+        </div>
+        <p>Tạo phiếu bảo hành</p>
+        <table class="add_warranty">
+            <tbody>
+                <tr>
+                    <td><span>Số điện thoại</span></td>
+                    <td>
+                        <p-dropdown [options]="customers" [(ngModel)]="selectedCustomer" name="customer"
+                            placeholder="Nhập số điện thoại" optionLabel="phone" [filter]="true"
+                            filterBy="phone" (onChange)="GetDeviceByUser($event.value)">
+                            <ng-template pTemplate="selectedItem" let-selected>
+                                <div class="flex align-items-center gap-2">
+                                    <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png"
+                                        [class]="'flag flag-' + selected?.id" style="width: 10px" />
+                                    <div *ngIf="selectedCustomer">{{ selected?.name + " (" +
+                                        selected?.phone + ")" }}</div>
+                                </div>
+                            </ng-template>
+                            <ng-template let-customer pTemplate="item">
+                                <div class="flex align-items-center gap-2">
+                                    <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png"
+                                        [class]="'flag flag-' + customer.id" style="width: 10px" />
+                                    <div>{{ customer?.name + " (" + customer?.phone + ")" }}</div>
+                                </div>
+                            </ng-template>
+                        </p-dropdown>
+                    </td>
+                </tr>
+                <tr>
+                    <td><span>Ngày hẹn bảo hành</span></td>
+                    <td>
+                        <form>
+                            <p-calendar [showButtonBar]="true" [showIcon]="true"
+                                [(ngModel)]="createAppointmentDate" name="appointmentDate"></p-calendar>
+                        </form>
+                    </td>
+                </tr>
+                <tr>
+                    <td><span>Mô tả</span></td>
+                    <td><textarea rows="5" cols="30" [required]="true" [(ngModel)]="createDescription" name="description"
+                            pInputTextarea></textarea></td>
+                </tr>
+                <tr>
+                    <td><span>Tên thiết bị</span></td>
+                    <td>
+                        <p-multiSelect [options]="deviceOptions" [(ngModel)]="selectedDevices"
+                            name="devices" optionLabel="name"></p-multiSelect>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="device_table" *ngIf="selectedDevices && selectedDevices.length > 0">
+            <p-table  [value]="selectedDevices" [styleClass]="'p-datatable-sm align-items-center'" [style]="{'width' : '90%'}">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Serial number</th>
+                        <th>Tên thiết bị</th>
+                        <th>Mô tả</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-device let-i="rowIndex">
+                    <tr>
+                        <td>{{ device.id }}</td>
+                        <td>{{ device.name }}</td>
+                        <td><input type="text" pInputText [(ngModel)]="device[i]" 
+                            (ngModelChange)="updateDevice($event, i)"/></td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+        <div class="button">
+            <p-toast></p-toast>
+            <p-button label="Tạo" (onClick)="createWarrantyTicket()"></p-button>
+        </div>
+    </div>
+</div>
+

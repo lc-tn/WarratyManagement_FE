@@ -1,220 +1,313 @@
 <div class="all">
     <app-home></app-home>
     <div class="left_side">
-        <div class="list">
-            <div class="search" pInputText>
+        <div>
+            <p-button icon="pi pi-pencil" severity="info" [outlined]="true" (onClick)="navigate()" [style]="{'width' : '100%', 'margin-bottom' : '15px'}">Tạo phiếu bảo hành</p-button>
+        </div>
+        <div class="info">
+            <div class="list">
+                <!-- <div class="search" pInputText>
                 <i class="pi pi-search"></i>
                 <input type="text" placeholder="Mã phiếu bảo hành" />
-            </div>
-            <form [formGroup]="warrantyEditForm">
-                <table>
-                    <div formArrayName="warranties">
-                        <div *ngFor="let warranty of warranties.controls; let i = index" [formGroupName]="i">
-                            <div class="warranty_list" (click)="GetInfo(warranty, i)"
-                                [ngStyle]="{'background-color': i === selectedIndex ? 'rgba(86,100,209,255)' : ''}">
-                                <tbody>
-                                    <tr>
-                                        <td><span>Mã phiếu bảo hành</span></td>
-                                        <td><span class="content">{{warranty.value.id}}</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td><span>Ngày tạo</span></td>
-                                        <td><span class="content">{{warranty.value.createDate | date:'dd/MM/yyyy h:mma'}}</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td><span>Tên khách hàng</span></td>
-                                        <td><span class="content">{{warranty.value.customerName}}</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td><span>Trạng thái</span></td>
-                                        <td><span class="content">{{warranty.value.status}}</span></td>
-                                    </tr>
-                                </tbody>
-                            </div>
-                        </div>
-                    </div>
-                </table>
-            </form>
-        </div>
-
-        <div class="detail">
-            <p-tabMenu [model]="items" [activeItem]="activeItem">
-                <ng-template pTemplate="item" let-item>
-                    <a (click)="selectItem(item)"
-                        class="p-menuitem-link flex justify-content-between align-items-center p-3">
-                        <div>
-                            <span [class]="item.icon"></span>
-                            <span> {{ item.label }}</span>
-                        </div>
-                        <div>
-                            <span *ngIf="item.shortcut" [class]="item.shortcutClass">{{ item.shortcut }}</span>
-                        </div>
-                    </a>
-                </ng-template>
-            </p-tabMenu>
-
-            <div *ngIf="selectedItem">
-                <div *ngIf="selectedItem.label === 'Chi tiết phiếu bảo hành'">
-                    <div *ngIf="warranty">
-                        <div class="detail_header">
-                            <div class="status">
-                                <p-steps [model]="status" [readonly]="true"></p-steps>
-                            </div>
-
-                            <div class="detail_info">
-                                <!-- First Table -->
-                                <table class="detail_ticket">
-                                    <tr>
-                                        <td>Mã PBH</td>
-                                        <td><span>{{warranty.id}}</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Sale chính</td>
-                                        <td>
-                                            <div class="card flex justify-content-center">
-                                                <p-dropdown [options]="sales" [(ngModel)]="selectedUser" optionLabel="name" [filter]="true" filterBy="name">
-                                                    <ng-template pTemplate="selectedItem" let-selectedSale>
-                                                        <div class="flex align-items-center gap-2">
-                                                            <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + selectedSale?.id" style="width: 10px"/>
-                                                            <div>{{ selectedSale?.userName }}</div>
-                                                        </div>
-                                                    </ng-template>
-                                                    <ng-template let-sale pTemplate="item">
-                                                        <div class="flex align-items-center gap-2">
-                                                            <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + sale.id" style="width: 10px"/>
-                                                            <div>{{ sale?.userName }}</div>
-                                                        </div>
-                                                    </ng-template>
-                                                </p-dropdown>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Người xử lý</td>
-                                        <td>
-                                            <div class="card flex justify-content-center">
-                                                <p-dropdown [options]="technicians" [(ngModel)]="selectedTechnician" optionLabel="name" [filter]="true" filterBy="name">
-                                                    <ng-template pTemplate="selectedItem" let-selectedTechnician>
-                                                        <div class="flex align-items-center gap-2">
-                                                            <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + selectedTechnician?.id" style="width: 10px"/>
-                                                            <div>{{ selectedTechnician?.userName }}</div>
-                                                        </div>
-                                                    </ng-template>
-                                                    <ng-template let-technician pTemplate="item">
-                                                        <div class="flex align-items-center gap-2">
-                                                            <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + technician.id" style="width: 10px"/>
-                                                            <div>{{ technician?.userName }}</div>
-                                                        </div>
-                                                    </ng-template>
-                                                </p-dropdown>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </table>
-
-                                <!-- Second Table -->
-                                <table class="detail_customer">
-                                    <tr>
-                                        <td>Tên KH</td>
-                                        <td><span>{{warranty.customerName}}</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Thời gian tạo</td>
-                                        <td><span>{{warranty.createDate | date:'dd/MM/yyyy h:mma'}}</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Ngày hẹn</td>
-                                        <td><span>{{warranty.appointmentDate | date:'dd/MM/yyyy'}}</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Ngày bảo hành thực tế</td>
-                                        <td>
-                                            <p-calendar [showButtonBar]="true" [showIcon]="true"
-                                            formControlName="appointmentDate"></p-calendar>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
-
-                            <div class="device">
-                                <p-table [value]="device" [tableStyle]="{ 'margin-top': '20px' }">
-                                    <ng-template pTemplate="header">
+            </div> -->
+                <form [formGroup]="warrantyEditForm">
+                    <table>
+                        <div formArrayName="warranties">
+                            <div *ngFor="let warranty of warranties.controls; let i = index" [formGroupName]="i">
+                                <div class="warranty_list" (click)="GetInfo(warranty, i)"
+                                    [ngStyle]="{'background-color': i === selectedIndex ? 'rgba(86,100,209,255)' : ''}">
+                                    <tbody>
                                         <tr>
-                                            <th>Serial number</th>
-                                            <th>Tên thiết bị</th>
-                                            <th>Số lượng bảo hành</th>
-                                            <th>Hạn bảo hành</th>
+                                            <td><span>Mã phiếu bảo hành</span></td>
+                                            <td><span class="content">{{warranty.value.id}}</span></td>
                                         </tr>
-                                    </ng-template>
-                                    <ng-template pTemplate="body" let-d>
                                         <tr>
-                                            <td><span>{{ d.id }}</span></td>
-                                            <td><span>{{ d.name }}</span></td>
-                                            <td>A</td>
-                                            <td>B</td>
+                                            <td><span>Ngày tạo</span></td>
+                                            <td><span class="content">{{warranty.value.createDate | date:'dd/MM/yyy h:mma'}}</span></td>
                                         </tr>
-                                    </ng-template>
-                                </p-table>
-                            </div>
-                            <div class="button">
-                                <p-toast></p-toast>
-                                <p-button label="Sửa"></p-button>
+                                        <tr>
+                                            <td><span>Tên khách hàng</span></td>
+                                            <td><span class="content">{{warranty.value.customerName}}</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td><span>Trạng thái</span></td>
+                                            <td><span class="content">{{warranty.value.status}}</span></td>
+                                        </tr>
+                                    </tbody>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-
-                <div *ngIf="selectedItem.label === 'Tạo phiếu bảo hành'" [formGroup]="warrantyCreateForm">
-                    <table class="add_warranty">
-                        <tbody>
-                            <tr>
-                                <td><span>Tên khách hàng</span></td>
-                                <td><input type="text" pInputText value={{username}} formControlName="customerName"
-                                        required ngModel /></td>
-                            </tr>
-                            <tr>
-                                <td><span>Ngày hẹn bảo hành</span></td>
-                                <td>
-                                    <form [formGroup]="warrantyCreateForm">
-                                        <p-calendar [showButtonBar]="true" [showIcon]="true"
-                                            formControlName="appointmentDate"></p-calendar>
-                                    </form>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><span>Mô tả</span></td>
-                                <td><textarea rows="5" cols="30" formControlName="description"
-                                        pInputTextarea></textarea></td>
-                            </tr>
-                            <tr>
-                                <td><span>Mã thiết bị</span></td>
-                                <td><input type="text" pInputText formControlName="deviceId" /></td>
-                            </tr>
-                        </tbody>
                     </table>
-                    <div *ngIf="device[0]">
-                        <p-table [value]="device" [tableStyle]="{ 'margin-top': '20px' }">
+                </form>
+            </div>
+
+            <div class="detail">
+                <p-tabMenu [model]="items" [activeItem]="activeItem">
+                    <ng-template pTemplate="item" let-item>
+                        <a (click)="selectItem(item)"
+                            class="p-menuitem-link flex justify-content-between align-items-center p-3">
+                            <div>
+                                <span [class]="item.icon"></span>
+                                <span> {{ item.label }}</span>
+                            </div>
+                            <div>
+                                <span *ngIf="item.shortcut" [class]="item.shortcutClass">{{ item.shortcut }}</span>
+                            </div>
+                        </a>
+                    </ng-template>
+                </p-tabMenu>
+
+                <div *ngIf="selectedItem">
+                    <div *ngIf="selectedItem.label === 'Chi tiết phiếu bảo hành'">
+                        <div *ngIf="warrantyById">
+                            <div class="detail_header">
+                                <!-- (activeIndexChange)="onActiveIndexChange($event)" -->
+                                <div class="status">
+                                    <p-steps [model]="status" [readonly]="true" [activeIndex]="activeIndex"
+                                        [style]="{'margin-top': '10px'}"></p-steps>
+                                </div>
+                                <form #editForm="ngForm">
+                                    <div class="detail_info">
+                                        <table class="detail_ticket">
+                                            <tr>
+                                                <td>Mã PBH</td>
+                                                <td><input pInputText readonly class="p-inputtext-sm"
+                                                        [(ngModel)]="warrantyById.id" name="warrantyId"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Người tạo</td>
+                                                <td><span>{{ warrantyById.creator }}</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Sale chính</td>
+                                                <td>
+                                                    <div class="card flex justify-content-center">
+                                                        <p-dropdown [options]="sales" [(ngModel)]="selectedSale"
+                                                            name="sale" placeholder="selectedSale"
+                                                            optionLabel="userName" [filter]="true" filterBy="name">
+                                                            <ng-template pTemplate="selectedItem" let-selectedSale>
+                                                                <div class="flex align-items-center">
+                                                                    <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png"
+                                                                        [class]="'flag flag-' + selectedSale?.id"
+                                                                        style="width: 10px" />
+                                                                    <div>{{ selectedSale?.userName }}</div>
+                                                                </div>
+                                                            </ng-template>
+                                                            <ng-template let-sale pTemplate="item">
+                                                                <div class="flex align-items-center">
+                                                                    <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png"
+                                                                        [class]="'flag flag-' + sale.id"
+                                                                        style="width: 10px" />
+                                                                    <div>{{ sale?.userName }}</div>
+                                                                </div>
+                                                            </ng-template>
+                                                        </p-dropdown>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Người xử lý</td>
+                                                <td>
+                                                    <div class="card flex justify-content-center">
+                                                        <p-dropdown [options]="technicians"
+                                                            [(ngModel)]="selectedTechnician" name="technician"
+                                                            placeholder="selectedTechnician" optionLabel="name"
+                                                            [filter]="true" filterBy="name">
+                                                            <ng-template pTemplate="selectedItem"
+                                                                let-selectedTechnician>
+                                                                <div class="flex align-items-center gap-2">
+                                                                    <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png"
+                                                                        [class]="'flag flag-' + selectedTechnician?.id"
+                                                                        style="width: 10px" />
+                                                                    <div>{{ selectedTechnician?.userName }}</div>
+                                                                </div>
+                                                            </ng-template>
+                                                            <ng-template let-technician pTemplate="item">
+                                                                <div class="flex align-items-center gap-2">
+                                                                    <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png"
+                                                                        [class]="'flag flag-' + technician.id"
+                                                                        style="width: 10px" />
+                                                                    <div>{{ technician?.userName }}</div>
+                                                                </div>
+                                                            </ng-template>
+                                                        </p-dropdown>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </table>
+
+                                        <table class="detail_customer">
+                                            <tr>
+                                                <td>Tên KH</td>
+                                                <td><input type="text" pInputText readonly class="p-inputtext-sm"
+                                                        [(ngModel)]="warrantyById.customerName" name="customerName">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Thời gian tạo</td>
+                                                <td><input type="text" pInputText readonly class="p-inputtext-sm"
+                                                        [(ngModel)]="warrantyById.createDate" name="createDate"
+                                                        [value]="warrantyById.createDate | date:'dd/MM/yyyy h:mma'">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Ngày hẹn</td>
+                                                <td><input type="text" pInputText readonly class="p-inputtext-sm"
+                                                        [(ngModel)]="warrantyById.appointmentDate"
+                                                        name="appointmentDate"
+                                                        [value]="warrantyById.appointmentDate | date:'dd/MM/yyyy'">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Ngày bảo hành thực tế</td>
+                                                <td>
+                                                    <p-calendar [showButtonBar]="true" [showIcon]="true"
+                                                        [placeholder]="warrantyById.warrantyDate?.toString()"
+                                                        (ngModel)="warrantyById.warrantyDate"
+                                                        (ngModelChange)="setWarrantyDate($event)"
+                                                        name="warrantyDate"></p-calendar>
+                                                </td>
+                                            </tr>
+                                        </table>
+
+                                    </div>
+                                    <div class="description">
+                                        <p>Mô tả</p>
+                                        <textarea rows="5" cols="30" pInputTextarea [value]="warrantyById.description"
+                                            [(ngModel)]="warrantyDescription" name="description"></textarea>
+                                    </div>
+
+                                    <div class="device">
+                                        <p-table [value]="devices" [tableStyle]="{ 'margin-top': '20px' }">
+                                            <ng-template pTemplate="header">
+                                                <tr>
+                                                    <th></th>
+                                                    <th>Serial number</th>
+                                                    <th>Tên thiết bị</th>
+                                                    <th>Mô tả</th>
+                                                    <th>Tình trạng bảo hành</th>
+                                                    <th>Kết quả xử lý</th>
+                                                </tr>
+                                            </ng-template>
+                                            <ng-template pTemplate="body" let-i="rowIndex" let-d>
+                                                <tr>
+                                                    <td>
+                                                        <p-button (click)="showDialog(d, i)" icon="pi pi-external-link" label="Sửa"></p-button>
+                                                    </td>
+            
+                                                    <td><span>{{ d.id }}</span></td>
+                                                    <td><span>{{ d.name }}</span></td>
+                                                    <td><span>{{ d.description }}</span></td>
+                                                    <td><span>{{ d.status }}</span></td>
+                                                    <td><span>{{ d.result }}</span></td>
+                                                </tr>
+                                            </ng-template>
+                                        </p-table>
+                                        <p-dialog header="Sửa thiết bị" [(visible)]="visible" [style]="{width: '80%'}">
+                                            <p-table [value]="editDevices" [tableStyle]="{ 'margin-top': '20px' }">
+                                                <ng-template pTemplate="header">
+                                                    <tr>
+                                                        <th>Serial number</th>
+                                                        <th>Tên thiết bị</th>
+                                                        <th>Mô tả</th>
+                                                        <th>Tình trạng bảo hành</th>
+                                                        <th>Kết quả xử lý</th>
+                                                    </tr>
+                                                </ng-template>
+                                                <ng-template pTemplate="body" let-i="rowIndex" let-device>
+                                                    <tr>
+                                                        <td>
+                                                            <input type="text" pInputText readonly class="p-inputtext-sm"
+                                                            [value]="device.id" [(ngModel)]="deviceId" name="deviceId">
+                                                        </td>
+                                                        <td><span>{{ device.name }}</span></td>
+                                                        <td>
+                                                            <input type="text" pInputText [placeholder]="device.description" name="description"
+                                                            [(ngModel)]="deviceDescription"/>    
+                                                        </td>
+                                                        <td>
+                                                            <p-dropdown [options]="deviceStatusOptions"
+                                                            [placeholder]="device.status?.toString()"
+                                                            [(ngModel)]="deviceStatus" appendTo="body" name="status"
+                                                            (ngModelChange)="updateDevice($event, deviceResult, deviceId, i)"></p-dropdown>    
+                                                        </td>
+                                                        <td>
+                                                            <p-dropdown [options]="deviceResultOptions"
+                                                            [placeholder]="device.result?.toString() || ''"
+                                                            [(ngModel)]="deviceResult" appendTo="body" name="result"
+                                                            (ngModelChange)="updateDevice(deviceStatus, $event, deviceId, i)"></p-dropdown>    
+                                                        </td>
+                                                    </tr>
+                                                   
+                                                </ng-template>
+                                                
+                                            </p-table>       
+                                            <p-button class="button" label="Sửa" (onClick)="editWarrantyDevice( )"></p-button>          
+                                        </p-dialog>
+                                    </div>
+                                    <div class="button">
+                                        <p-toast></p-toast>
+                                        <p-button label="Sửa" (onClick)="editWarrantyTicket()"></p-button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div *ngIf="selectedItem.label === 'Lịch sử phiếu bảo hành'">
+                        <div *ngIf="warrantyById">
+                            <p-table [value]="warrantyHistoryList" [styleClass]="'p-datatable-sm'">
+                                <ng-template pTemplate="caption"> Mã phiếu bảo hành: {{warrantyById.id}} </ng-template>
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                        <th>Người sửa đổi</th>
+                                        <th>Mô tả</th>
+                                        <th>Ngày bảo hành thực tế</th>
+                                        <th>Sale chính</th>
+                                        <th>Người xử lý</th>
+                                        <th>Trạng thái</th>
+                                        <th>Thời gian sửa đổi</th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-warrantyHistory>
+                                    <tr>
+                                        <td>{{ warrantyHistory.modifier }}</td>
+                                        <td>{{ warrantyHistory.description }}</td>
+                                        <td>{{ warrantyHistory.warrantyDate | date:'dd/MM/yyyy h:mma' }}</td>
+                                        <td>{{ warrantyHistory.sale }}</td>
+                                        <td>{{ warrantyHistory.technician }}</td>
+                                        <td>{{ warrantyHistory.status }}</td>
+                                        <td>{{ warrantyHistory.modifyDate | date:'dd/MM/yyyy h:mma' }}</td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </div>
+                    </div>
+
+                    <div *ngIf="selectedItem.label === 'Lịch sử thiết bị'">
+                        <p-table [value]="warrantyDeviceHistoryList" [styleClass]= "'p-datatable-sm'">
+                            <ng-template pTemplate="caption"> Mã phiếu bảo hành: {{warrantyById.id}} </ng-template>
                             <ng-template pTemplate="header">
                                 <tr>
-                                    <th>Serial number</th>
-                                    <th>Tên thiết bị</th>
-                                    <th>Số lượng bảo hành</th>
-                                    <th>Hạn bảo hành</th>
+                                    <th>Người sửa đổi</th>
+                                    <th>Mã thiết bị</th>
+                                    <th>Mô tả</th>
+                                    <th>Tình trạng bảo hành</th>                                    
+                                    <th>Kết quả</th>
+                                    <th>Ngày sửa đổi</th>
                                 </tr>
                             </ng-template>
-                            <ng-template pTemplate="body" let-d>
+                            <ng-template pTemplate="body" let-warrantyDeviceHistory>
                                 <tr>
-                                    <td><span>{{ d.id }}</span></td>
-                                    <td><span>B</span></td>
-                                    <td>A</td>
-                                    <td>B</td>
+                                    <td>{{ warrantyDeviceHistory.modifier}}</td>
+                                    <td>{{ warrantyDeviceHistory.deviceId }}</td>
+                                    <td>{{ warrantyDeviceHistory.description }}</td>
+                                    <td>{{ warrantyDeviceHistory.status }}</td>                                    
+                                    <td>{{ warrantyDeviceHistory.result }}</td>
+                                    <td>{{ warrantyDeviceHistory.modifyDate | date:'dd/MM/yyyy h:mma' }}</td>
                                 </tr>
                             </ng-template>
                         </p-table>
-                    </div>
-                    <div class="button">
-                        <p-toast></p-toast>
-                        <p-button label="Tạo" (onClick)="createWarranty()"></p-button>
                     </div>
                 </div>
             </div>

@@ -43,7 +43,6 @@ export class UserComponent {
         });
         this.users.push(userGroup);
       });
-      console.log(users)
     });
   }
 
@@ -59,11 +58,8 @@ export class UserComponent {
   onSubmit(i: number) {
     const userGroup = this.users.at(i) as FormGroup;
     this.user = userGroup.value;
-    console.log(this.user);
     this.httpService.editUser(this.user).subscribe(response => {
-      console.log('Edit user successfully', response);
     }, error => {
-      console.error('Error editing user', error);
     });
   }
 }

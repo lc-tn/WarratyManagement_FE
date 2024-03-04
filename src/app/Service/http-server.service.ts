@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs/internal/Observable';
-import { Warranty } from '../warranty/warranty.component';
+import { WarrantyById, Warranty, WarrantyHistory, EditWarranty, WarrantyDeviceHistory, WarrantyDevice } from '../warranty/warranty.component';
 import { User } from '../user/user.component';
 import { Role } from '../role/role.component';
 import { Permission, RolePermission } from '../permission/permission.component';
 import { Device } from '../device/device.component';
+import { CreateWarranty } from '../create-warranty/create-warranty.component';
 
 @Injectable({
   providedIn: 'root'
@@ -36,9 +37,9 @@ export class HttpServerService {
     return this.httpClient.put<User>(url, user, this.httpOptions);
   }
 
-  public createWarranty(warranty: Warranty): Observable<HttpResponse<string>>{
+  public createWarranty(warranty: CreateWarranty): Observable<CreateWarranty>{
     const url = `${this.REST_API_SERVER}/Warranty`;
-    return this.httpClient.post<HttpResponse<string>>(url, warranty, this.httpOptions);
+    return this.httpClient.post<CreateWarranty>(url, warranty, this.httpOptions);
   }
 
   public getWarranty(): Observable<Warranty[]> {
@@ -46,14 +47,14 @@ export class HttpServerService {
     return this.httpClient.get<Warranty[]>(url, this.httpOptions);
   }
 
-  public editWarranty(warranty: Warranty): Observable<Warranty> {
+  public editWarranty(editWarranty: EditWarranty): Observable<EditWarranty> {
     const url = `${this.REST_API_SERVER}/Warranty`;
-    return this.httpClient.put<Warranty>(url, warranty, this.httpOptions);
+    return this.httpClient.put<EditWarranty>(url, editWarranty, this.httpOptions);
   }
 
-  public getWarrantyById(id: number): Observable<Warranty> {
+  public getWarrantyById(id: number): Observable<WarrantyById> {
     const url = `${this.REST_API_SERVER}/Warranty/${id}`;
-    return this.httpClient.get<Warranty>(url, this.httpOptions);
+    return this.httpClient.get<WarrantyById>(url, this.httpOptions);
   }
 
   public getRole(): Observable<Role[]> {
@@ -94,5 +95,40 @@ export class HttpServerService {
   public getDeviceById(id: any): Observable<Device> {
     const url = `${this.REST_API_SERVER}/Device/${id}`;
     return this.httpClient.get<Device>(url, this.httpOptions);
+  }
+
+  public getDeviceByUser(userId: any): Observable<Device[]> {
+    const url = `${this.REST_API_SERVER}/Device/device/${userId}`;
+    return this.httpClient.get<Device[]>(url, this.httpOptions);
+  }
+
+  public getWarrantyHistory(warrantyId: number): Observable<WarrantyHistory[]> {
+    const url = `${this.REST_API_SERVER}/WarrantyHistory/${warrantyId}`;
+    return this.httpClient.get<WarrantyHistory[]>(url, this.httpOptions);
+  }
+
+  public addWarrantyHistory(warrantyHistory: EditWarranty): Observable<EditWarranty>{
+    const url = `${this.REST_API_SERVER}/WarrantyHistory`;
+    return this.httpClient.post<EditWarranty>(url, warrantyHistory, this.httpOptions);
+  }
+
+  public getWarrantyDeviceHistory(warrantyId: number): Observable<WarrantyDeviceHistory[]> {
+    const url = `${this.REST_API_SERVER}/WarrantyDeviceHistory/${warrantyId}`;
+    return this.httpClient.get<WarrantyDeviceHistory[]>(url, this.httpOptions);
+  }
+
+  public editWarrantyDevice(warrantyDevice: WarrantyDevice): Observable<WarrantyDevice>{
+    const url = `${this.REST_API_SERVER}/WarrantyDevice`;
+    return this.httpClient.put<WarrantyDevice>(url, warrantyDevice, this.httpOptions);
+  }
+
+  public addWarrantyDeviceHistory(warrantyDeviceHistory: WarrantyDevice): Observable<WarrantyDevice>{
+    const url = `${this.REST_API_SERVER}/WarrantyDeviceHistory`;
+    return this.httpClient.post<WarrantyDevice>(url, warrantyDeviceHistory, this.httpOptions);
+  }
+
+  public addWarrantyDevice(warrantyDevice: WarrantyDevice): Observable<WarrantyDevice>{
+    const url = `${this.REST_API_SERVER}/WarrantyDevice`;
+    return this.httpClient.post<WarrantyDevice>(url, warrantyDevice, this.httpOptions);
   }
 }

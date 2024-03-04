@@ -38,7 +38,6 @@ export class PermissionComponent {
 
     this.httpService.getPermission(this.role.id).subscribe(response => {
       this.permissionListByRole = response;
-      console.log(this.permissionListByRole);
       
       this.httpService.getAllPermission().subscribe((permissions) => {
         this.permissionList = permissions;
@@ -76,9 +75,7 @@ export class PermissionComponent {
     console.log(this.rolePermission);
 
     this.httpService.editRolePermission(this.rolePermission).subscribe(response => {
-      console.log('Edit user successfully', response);
     }, error => {
-      console.error('Error editing user', error);
     });
   }  
 }

@@ -1,27 +1,30 @@
-<ul>
-    <div class="image">
-        <img src="assets/image/FPT_Telecom_logo.png" alt="">
-    </div>
-    <li routerLinkActive="active">
-        <span class="pi pi-server" style="color: white; font-size: 1.5rem"></span>
-        <a routerLink="/device" >Quản lý danh mục thiết bị</a>
-    </li>
-    <li routerLinkActive="active">
-        <span class="pi pi-file" style="color: white; font-size: 1.5rem"></span>
-        <a routerLink="/warranty">Quản lý bảo hành điện tử</a>
-    </li>
-    <li routerLinkActive="active">
-        <span class="pi pi-users" style="color: white; font-size: 1.5rem"></span>
-        <a routerLink="/user">Quản lý người dùng</a>
-    </li>
-    <li routerLinkActive="active">
-        <span class="pi pi-verified" style="color: white; font-size: 1.5rem"></span>        
-        <a routerLink="/role">Quản lý role</a>
-    </li>
-    
-    <li>
-        <span class="pi pi-sign-out" style="color: red; font-size: 1.5rem"></span>
-        <a routerLink="/login" (click)="Logout()" style="color: red;">{{username}}</a>
-    </li>
-</ul>
+<div class="dashboard"> 
+    <ul>
+        <div class="image">
+            <img src="assets/image/FPT_Telecom_logo.png" alt="">
+        </div>
+        <li routerLinkActive="active">
+            <span class="pi pi-server" style="color: white; font-size: 1.5rem"></span>
+            <a routerLink="/device" >Quản lý danh mục thiết bị</a>
+        </li>
+        <li routerLinkActive="active">
+            <span class="pi pi-file" style="color: white; font-size: 1.5rem"></span>
+            <a routerLink="/warranty">Quản lý bảo hành điện tử</a>
+        </li>
+        <li routerLinkActive="active">
+            <span class="pi pi-users" style="color: white; font-size: 1.5rem"></span>
+            <a routerLink="/user">Quản lý người dùng</a>
+        </li>
+        <li routerLinkActive="active">
+            <span class="pi pi-verified" style="color: white; font-size: 1.5rem"></span>        
+            <a routerLink="/role">Quản lý role</a>
+        </li>
+        
+        <li>
+            <span class="pi pi-sign-out" style="color: red; font-size: 1.5rem"></span>
+            <a routerLink="/login" (click)="Logout()" style="color: red;">{{username}}</a>
+        </li>
+    </ul>
+</div>
+
 <router-outlet></router-outlet>
