@@ -35,6 +35,10 @@ import { DataViewModule } from 'primeng/dataview';
 import { CreateWarrantyComponent } from './create-warranty/create-warranty.component';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { DialogModule } from 'primeng/dialog';
+import { PaginatorModule } from 'primeng/paginator';
+import { ReportComponent } from './report/report.component';
+import { ChartModule } from 'primeng/chart';
+import { PickListModule } from 'primeng/picklist';
 
 @NgModule({
   declarations: [
@@ -48,6 +52,7 @@ import { DialogModule } from 'primeng/dialog';
     PermissionComponent,
     DeviceComponent,
     CreateWarrantyComponent,
+    ReportComponent,
     // PBadgeComponent
   ],
   imports: [
@@ -80,7 +85,10 @@ import { DialogModule } from 'primeng/dialog';
     MultiSelectModule,
     DataViewModule,
     ConfirmPopupModule,
-    DialogModule
+    DialogModule,
+    PaginatorModule,
+    ChartModule,
+    PickListModule
   ],
   providers: [
     {

@@ -1,0 +1,51 @@
+.all {
+    display: flex;
+    background-color: #f0f5f8;
+  }
+  
+  .chart{
+    display: flex;
+
+    .pie{
+      width: 30%;
+      margin-right: 10px;
+    }
+
+    .stacked-bar{
+      width: 67.9%;
+
+      .button{
+        margin-top: 10px;
+        display: flex;
+        justify-content: space-around;
+      }
+    }
+  }
+
+  .filter{
+    padding: 10px;
+    margin-top: 15px;
+    font-weight: 700;
+    // color: #374151;
+    background: #f9fafb;
+    display: flex;
+    justify-content: flex-end;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  .p-float-label{
+    margin-left: 0 10px;
+  }
+
+  
+  .right_side {
+    padding: 15px;
+    margin: 15px;
+    background-color: white;
+    width: 100%;
+    border-radius: 5px;
+  }
+
+  p{
+    font-size: large;
+  }

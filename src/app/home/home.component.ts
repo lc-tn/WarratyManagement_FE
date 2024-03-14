@@ -9,6 +9,7 @@ import { tokenGetter } from '../app.module';
 export class HomeComponent {
 
   public username: string | undefined;
+  role: any = localStorage.getItem('role');
 
   constructor(){}
   ngOnInit(): void {

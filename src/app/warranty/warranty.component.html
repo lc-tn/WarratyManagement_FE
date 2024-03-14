@@ -1,6 +1,6 @@
 <div class="all">
     <app-home></app-home>
-    <div class="left_side">
+    <div class="right_side">
         <div>
             <p-button icon="pi pi-pencil" severity="info" [outlined]="true" (onClick)="navigate()" [style]="{'width' : '100%', 'margin-bottom' : '15px'}">Tạo phiếu bảo hành</p-button>
         </div>
@@ -38,6 +38,8 @@
                             </div>
                         </div>
                     </table>
+                    <p-paginator  [rows]="3" [totalRecords]="totalWarranty" (onPageChange)="WarrantyPageChange($event)"
+                                 [showFirstLastIcon]="false" [style]="{'padding' : '0'}"></p-paginator>
                 </form>
             </div>
 
@@ -163,7 +165,7 @@
                                                 <td>
                                                     <p-calendar [showButtonBar]="true" [showIcon]="true"
                                                         [placeholder]="warrantyById.warrantyDate?.toString()"
-                                                        (ngModel)="warrantyById.warrantyDate"
+                                                        (ngModel)="warrantyDate"
                                                         (ngModelChange)="setWarrantyDate($event)"
                                                         name="warrantyDate"></p-calendar>
                                                 </td>
@@ -181,18 +183,19 @@
                                         <p-table [value]="devices" [tableStyle]="{ 'margin-top': '20px' }">
                                             <ng-template pTemplate="header">
                                                 <tr>
-                                                    <th></th>
+                                                    <th>Chỉnh sửa</th>
                                                     <th>Serial number</th>
                                                     <th>Tên thiết bị</th>
                                                     <th>Mô tả</th>
                                                     <th>Tình trạng bảo hành</th>
                                                     <th>Kết quả xử lý</th>
+                                                    <th>Thiết bị thay thế</th>
                                                 </tr>
                                             </ng-template>
                                             <ng-template pTemplate="body" let-i="rowIndex" let-d>
                                                 <tr>
                                                     <td>
-                                                        <p-button (click)="showDialog(d, i)" icon="pi pi-external-link" label="Sửa"></p-button>
+                                                        <p-button (click)="editDeviceDialog(d, i)" icon="pi pi-file-edit" label=""></p-button>
                                                     </td>
             
                                                     <td><span>{{ d.id }}</span></td>
@@ -200,10 +203,32 @@
                                                     <td><span>{{ d.description }}</span></td>
                                                     <td><span>{{ d.status }}</span></td>
                                                     <td><span>{{ d.result }}</span></td>
+
+                                                    <td>
+                                                        <p-button (click)="replaceDeviceDialog()" icon="pi pi-file-edit" label=""></p-button>
+                                                    </td>
                                                 </tr>
                                             </ng-template>
                                         </p-table>
-                                        <p-dialog header="Sửa thiết bị" [(visible)]="visible" [style]="{width: '80%'}">
+                                        <p-dialog header="Header" [(visible)]="replaceDeviceVisibility" [style]="{width: '50vw'}">
+                                        <!-- <p-pickList [source]="sourceProducts" [target]="targetProducts" sourceHeader="Available" targetHeader="Selected" [dragdrop]="true" [responsive]="true" 
+    [sourceStyle]="{ height: '30rem' }" [targetStyle]="{ height: '30rem' }" breakpoint="1400px">
+    <ng-template let-product pTemplate="item">
+        <div class="flex flex-wrap p-2 align-items-center gap-3">
+            <img class="w-4rem shadow-2 flex-shrink-0 border-round" src="https://primefaces.org/cdn/primeng/images/demo/product/{{ product.image }}" alt="{item.name}" />
+            <div class="flex-1 flex flex-column gap-2">
+                <span class="font-bold">{{ product.name }}</span>
+                <div class="flex align-items-center gap-2">
+                    <i class="pi pi-tag text-sm"></i>
+                    <span>{{ product.category }}</span>
+                </div>
+            </div>
+            <span class="font-bold text-900">{{ '$' + product.price }}</span>
+        </div>
+    </ng-template>
+</p-pickList> -->
+                                        </p-dialog>
+                                        <p-dialog header="Sửa thiết bị" [(visible)]="editDeviceVisibility" [style]="{width: '80%'}">
                                             <p-table [value]="editDevices" [tableStyle]="{ 'margin-top': '20px' }">
                                                 <ng-template pTemplate="header">
                                                     <tr>
@@ -228,21 +253,19 @@
                                                         <td>
                                                             <p-dropdown [options]="deviceStatusOptions"
                                                             [placeholder]="device.status?.toString()"
-                                                            [(ngModel)]="deviceStatus" appendTo="body" name="status"
-                                                            (ngModelChange)="updateDevice($event, deviceResult, deviceId, i)"></p-dropdown>    
+                                                            [(ngModel)]="deviceStatus" appendTo="body" name="status"></p-dropdown>    
                                                         </td>
                                                         <td>
                                                             <p-dropdown [options]="deviceResultOptions"
                                                             [placeholder]="device.result?.toString() || ''"
-                                                            [(ngModel)]="deviceResult" appendTo="body" name="result"
-                                                            (ngModelChange)="updateDevice(deviceStatus, $event, deviceId, i)"></p-dropdown>    
+                                                            [(ngModel)]="deviceResult" appendTo="body" name="result"></p-dropdown>    
                                                         </td>
                                                     </tr>
                                                    
                                                 </ng-template>
                                                 
                                             </p-table>       
-                                            <p-button class="button" label="Sửa" (onClick)="editWarrantyDevice( )"></p-button>          
+                                            <p-button class="button" label="Sửa" (onClick)="editWarrantyDevice()"></p-button>          
                                         </p-dialog>
                                     </div>
                                     <div class="button">
@@ -273,7 +296,7 @@
                                     <tr>
                                         <td>{{ warrantyHistory.modifier }}</td>
                                         <td>{{ warrantyHistory.description }}</td>
-                                        <td>{{ warrantyHistory.warrantyDate | date:'dd/MM/yyyy h:mma' }}</td>
+                                        <td>{{ warrantyHistory.warrantyDate | date:'dd/MM/yyyy' }}</td>
                                         <td>{{ warrantyHistory.sale }}</td>
                                         <td>{{ warrantyHistory.technician }}</td>
                                         <td>{{ warrantyHistory.status }}</td>
@@ -281,6 +304,8 @@
                                     </tr>
                                 </ng-template>
                             </p-table>
+                            <p-paginator  [rows]="3" [totalRecords]="totalWarrantyHistory" (onPageChange)="WarrantyHistoryPageChange($event)"
+                                 [showFirstLastIcon]="false" [style]="{'padding' : '0'}"></p-paginator>
                         </div>
                     </div>
 
@@ -308,6 +333,8 @@
                                 </tr>
                             </ng-template>
                         </p-table>
+                        <p-paginator  [rows]="rows" [totalRecords]="totalWarrantyDeviceHistory" (onPageChange)="WarrantyDeviceHistoryPageChange($event)"
+                                 [showFirstLastIcon]="false" [style]="{'padding' : '0'}"></p-paginator>
                     </div>
                 </div>
             </div>

@@ -1,0 +1,103 @@
+<div class="all">
+    <app-home></app-home>
+    <div class="right_side">
+        <div class="chart">
+            <div class="pie card flex justify-content-center">
+                <p-chart type="pie" [data]="pieData" [options]="pieOptions"></p-chart>
+            </div>
+            <div class="stacked-bar">
+                <p-chart type="bar" [data]="stackedData" [options]="stackedOptions"></p-chart>
+                <div class="button">
+                    <p-button label="Tháng" [text]="true" severity="success" (onClick)="changeFilterDate()"></p-button>
+                    <p-button label="Quý" [text]="true" severity="info" (onClick)="stackedChartQuarter()"></p-button>
+                    <p-button label="Năm" [text]="true" severity="help" (onClick)="stackedChartYear()"></p-button>
+                </div>
+            </div>
+        </div>
+
+        <div class="filter">
+            <span class="p-float-label" style="margin-right: 10px;">
+                <p-calendar [(ngModel)]="fromDate" inputId="from_date" [showButtonBar]="true"
+                    (ngModelChange)="changeFilterDate()"></p-calendar>
+                <label for="from_date">Từ ngày</label>
+            </span>
+
+            <span class="p-float-label" style="margin-right: 10px;">
+                <p-calendar [(ngModel)]="toDate" inputId="to_date" [showButtonBar]="true"
+                    (ngModelChange)="changeFilterDate()"></p-calendar>
+                <label for="to_date">Đến ngày</label>
+            </span>
+
+            <p-dropdown [options]="statuses" [(ngModel)]="selectedStatus" name="status"
+                placeholder="Tất cả" appendTo="body" (onChange)="changeStatus($event)"></p-dropdown>
+
+            <p-button label="XUẤT EXCEL" (onClick)="exportExcel()"
+                [style]="{'margin-left': '10px'}"></p-button>
+        </div>
+
+        <div class="table">
+            <p-table [value]="statusWarranties" [styleClass]="'p-datatable-sm'" [paginator]="true"
+                [rows]="5" [showCurrentPageReport]="true"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                [rowsPerPageOptions]="[1, 2, 3, 4, 5]">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>STT</th>
+                        <th>Mã PBH</th>
+                        <th>Ngày tạo</th>
+                        <th>Mô tả</th>
+                        <th>Ngày hẹn</th>
+                        <th>Ngày bảo hành thực tế</th>
+                        <th>Sale chính</th>
+                        <th>Người xử lý</th>
+                        <th>Tên khách hàng</th>
+                        <th>Trạng thái</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-warranty let-i = 'rowIndex'>
+                    <tr>
+                        <td>{{ i + 1 }}</td>
+                        <td>{{ warranty.id }}</td>
+                        <td>{{ warranty.createDate | date:'dd/MM/yyyy h:mma' }}</td>
+                        <td>{{ warranty.description }}</td>
+                        <td>{{ warranty.appointmentDate | date:'dd/MM/yyyy' }}</td>
+                        <td>{{ warranty.warrantyDate | date:'dd/MM/yyyy' }}</td>
+                        <td>{{ warranty.sale }}</td>
+                        <td>{{ warranty.technician }}</td>
+                        <td>{{ warranty.customerName }}</td>
+                        <td>{{ warranty.status }}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+
+    <p-table [value]="statusWarranties" id="warranty-table" [styleClass]="'p-datatable-sm'" hidden="true">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Mã PBH</th>
+                        <th>Ngày tạo</th>
+                        <th>Mô tả</th>
+                        <th>Ngày hẹn</th>
+                        <th>Ngày bảo hành thực tế</th>
+                        <th>Sale chính</th>
+                        <th>Người xử lý</th>
+                        <th>Tên khách hàng</th>
+                        <th>Trạng thái</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-warranty>
+                    <tr>
+                        <td>{{ warranty.id }}</td>
+                        <td>{{ warranty.createDate | date:'dd/MM/yyyy h:mma' }}</td>
+                        <td>{{ warranty.description }}</td>
+                        <td>{{ warranty.appointmentDate | date:'dd/MM/yyyy' }}</td>
+                        <td>{{ warranty.warrantyDate | date:'dd/MM/yyyy' }}</td>
+                        <td>{{ warranty.sale }}</td>
+                        <td>{{ warranty.technician }}</td>
+                        <td>{{ warranty.customerName }}</td>
+                        <td>{{ warranty.status }}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+</div>

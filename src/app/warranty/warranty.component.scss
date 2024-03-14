@@ -4,7 +4,7 @@
 }
 
 
-.left_side {
+.right_side {
   padding: 15px;
   margin: 15px;
   background-color: white;
@@ -163,11 +163,11 @@ span {
   margin-top: 10px;
 }
 
-::ng-deep .p-dropdown .p-dropdown-filter-icon {
-  height: 100%;
-  align-items: center;
-  top: 0;
-}
+// ::ng-deep .p-dropdown .p-dropdown-filter-icon {
+//   height: 100%;
+//   align-items: center;
+//   top: 0;
+// }
 
 // .p-datatable-wrapper{
 //   width: 100%;

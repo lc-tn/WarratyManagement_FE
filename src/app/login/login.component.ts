@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../Service/auth.service';
 import { Router } from '@angular/router';
 import { TransferServiceService } from '../Service/transfer-service.service';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Component({
   selector: 'app-login-component',
@@ -44,6 +45,10 @@ export class LoginComponentComponent {
       if (res) {
         localStorage.setItem('loginToken', res);
         localStorage.setItem('username', this.login.username);
+        const helper = new JwtHelperService();
+        const decoded= helper.decodeToken(res);
+        localStorage.setItem('role', decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role']);
+        localStorage.setItem('userId', decoded.UserId);
         this.router.navigateByUrl('/home');
       }
       else {

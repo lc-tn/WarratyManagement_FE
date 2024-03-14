@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { HttpServerService } from '../Service/http-server.service';
 import { MenuItem, MessageService } from 'primeng/api';
@@ -16,10 +16,18 @@ export class WarrantyComponent {
   check: Boolean = false;
   selectedIndex = -1;
   activeIndex: number = 0;
+  rows: number = 3;
   color: any;
   selectedItem: MenuItem | null = null;
   items: MenuItem[] | undefined;
   status: MenuItem[] | undefined;
+
+  warrantyPage: number = 0;
+  warrantyHistoryPage: number = 0;
+  warrantyDeviceHistoryPage: number = 0;
+  totalWarranty!: number;
+  totalWarrantyHistory: number = 0;
+  totalWarrantyDeviceHistory: number = 0;
 
   deviceStatusOptions!: string[];
   deviceResultOptions!: string[];
@@ -28,7 +36,6 @@ export class WarrantyComponent {
 
   editWarranty!: EditWarranty;
   warrantyById!: WarrantyById;
-  warrantyList: Warranty[] = [];
   warrantyStatus: string = '';
 
   warrantyHistoryList: WarrantyHistory[] = [];
@@ -66,7 +73,8 @@ export class WarrantyComponent {
   selectedDevices!: Device[] | null;
 
   constructor(private formBuilder: FormBuilder, private httpService: HttpServerService,
-    private messageService: MessageService, private router: Router,) {
+    private messageService: MessageService, private router: Router,
+    private cdr: ChangeDetectorRef) {
     this.warrantyEditForm = this.formBuilder.group({
       warranties: this.formBuilder.array([])
     });
@@ -91,7 +99,7 @@ export class WarrantyComponent {
       id: this.warrantyById.id,
       description: this.warrantyDescription,
       appointmentDate: this.warrantyById.appointmentDate,
-      warrantyDate: this.warrantyDate !== null ? this.warrantyDate.toJSON() : '',
+      warrantyDate: this.warrantyDate,
       status: this.warrantyStatus,
       sale: this.selectedSale !== null ? this.selectedSale?.name?.toString() : '',
       technician: this.selectedTechnician !== null ? this.selectedTechnician?.name?.toString() : '',
@@ -131,8 +139,8 @@ export class WarrantyComponent {
       this.warrantyById.sale === this.editWarranty.sale &&
       this.warrantyById.technician === this.editWarranty.technician &&
       this.warrantyById.status === this.editWarranty.status &&
-      ((this.warrantyDate === null && this.editWarranty.warrantyDate === '') ||
-        (this.editWarranty.warrantyDate == this.warrantyById.warrantyDate?.toISOString()))) {
+      (this.warrantyById.warrantyDate?.toLocaleDateString() === '1/1/1970' ||
+      this.warrantyById.warrantyDate.toISOString() === this.editWarranty.warrantyDate?.toISOString())) {
       this.messageService.add({ severity: 'info', summary: 'Info', detail: 'Không có gì thay đổi' });
     }
     else {
@@ -183,6 +191,14 @@ export class WarrantyComponent {
 
   selectItem(item: any) {
     this.selectedItem = item;
+
+    this.httpService.getWarrantyHistory(this.warrantyById.id, 0).subscribe(data => {
+      this.warrantyHistoryList = data;
+    });
+
+    this.httpService.getWarrantyDeviceHistory(this.warrantyById.id, 0).subscribe(data => {
+      this.warrantyDeviceHistoryList = data;
+    });
   }
 
   navigate() {
@@ -227,21 +243,18 @@ export class WarrantyComponent {
     ];
 
     this.products = [];
+    this.warrantyPage = 1;
 
-    this.httpService.getWarranty().subscribe((data) => {
-      this.warrantyList = data;
+    this.httpService.getTotalWarranty().subscribe((data) => {
+      this.totalWarranty = data;
     })
 
-    this.httpService.getWarranty().subscribe((warranties) => {
+    this.httpService.getWarrantyPagination(0).subscribe((warranties) => {
       warranties.forEach(warranty => {
         const warrantyGroup = this.formBuilder.group({
           id: [warranty.id],
-          description: [warranty.description],
           createDate: [warranty.createDate],
-          sale: [warranty.sale],
-          technician: [warranty.technician],
           status: [warranty.status],
-          deviceId: [warranty.deviceId],
           customerName: [warranty.customerName]
         });
         this.warranties.push(warrantyGroup);
@@ -293,8 +306,8 @@ export class WarrantyComponent {
       this.activeIndex = this.warrantyById.status === 'Chờ xác nhận' ? 0 :
         this.warrantyById.status === 'Đang xử lý' ? 1 : 2
 
-      if (this.warrantyById.warrantyDate?.toLocaleString() !== '0001-01-01T00:00:00' && 
-          this.warrantyById.warrantyDate !== null) {
+      if (this.warrantyById.warrantyDate?.toLocaleString() !== '0001-01-01T00:00:00' &&
+        this.warrantyById.warrantyDate !== null) {
         this.warrantyDate = new Date(this.warrantyById?.warrantyDate || Date.now());
       }
       else {
@@ -302,12 +315,20 @@ export class WarrantyComponent {
       }
     })
 
-    this.httpService.getWarrantyHistory(w.value.id).subscribe(data => {
+    this.httpService.getWarrantyHistory(w.value.id, 0).subscribe(data => {
       this.warrantyHistoryList = data;
+    });
+
+    this.httpService.getWarrantyDeviceHistory(w.value.id, 0).subscribe(data => {
+      this.warrantyDeviceHistoryList = data;
+    });
+
+    this.httpService.getTotalWarrantyHistory(w.value.id).subscribe((data) => {
+      this.totalWarrantyHistory = data;
     })
 
-    this.httpService.getWarrantyDeviceHistory(w.value.id).subscribe(data => {
-      this.warrantyDeviceHistoryList = data;
+    this.httpService.getTotalWarrantyDeviceHistory(w.value.id).subscribe((data) => {
+      this.totalWarrantyDeviceHistory = data;
     })
   }
 
@@ -331,30 +352,61 @@ export class WarrantyComponent {
 
   setWarrantyDate(date: any) {
     if (date != undefined)
-    this.warrantyDate = date;
-  else
-  this.warrantyDate = null;
+      this.warrantyDate = date;
+    else
+      this.warrantyDate = null;
   }
 
-  updateDevice(status: string, result: string, deviceId: number, i: number) {
-    // this.devices.forEach(device => {
-    //   if (device.id === deviceId){
-    //     device.status = status;
-    //     device.result = result;
-    //   }
-    // })
-  }
-
-  visible: boolean = false;
-  showDialog(d: Device, i: number) {
+  editDeviceVisibility: boolean = false;
+  editDeviceDialog(d: Device, i: number) {
     this.editDevices = [];
-    this.visible = true;
+    this.editDeviceVisibility = true;
     this.editDevices[0] = this.devices[i];
     this.deviceId = d.id;
     this.deviceDescription = d.description;
     this.deviceStatus = d.status;
     this.deviceResult = d.result;
   }
+
+  replaceDeviceVisibility: boolean = false;
+  replaceDeviceDialog() {
+    this.replaceDeviceVisibility = true;
+  }
+
+  WarrantyPageChange(pageNumber: any) {
+    this.warranties.clear();
+    this.httpService.getWarrantyPagination(pageNumber.page).subscribe((warranties) => {
+      warranties.forEach(warranty => {
+        const warrantyGroup = this.formBuilder.group({
+          id: [warranty.id],
+          description: [warranty.description],
+          createDate: [warranty.createDate],
+          status: [warranty.status],
+          customerName: [warranty.customerName]
+        });
+        this.warranties.push(warrantyGroup);
+      });
+    });
+  }
+
+  WarrantyHistoryPageChange(pageNumber: any) {
+    this.httpService.getWarrantyHistory(this.warrantyById.id, pageNumber.page).subscribe(data => {
+      this.warrantyHistoryList = data;
+    });
+  }
+
+  WarrantyDeviceHistoryPageChange(pageNumber: any) {
+    this.httpService.getWarrantyDeviceHistory(this.warrantyById.id, pageNumber.page).subscribe(data => {
+      this.warrantyDeviceHistoryList = data;
+    });
+  }
+}
+
+interface PageEvent {
+  first: number;
+  rows: number;
+  page: number;
+  pageCount: number;
 }
 
 export interface Warranty {
@@ -366,8 +418,6 @@ export interface Warranty {
   status: string,
   sale: string | undefined,
   technician: string | undefined,
-  modifier: string | undefined,
-  deviceId: number,
   customerName: string
 }
 
@@ -375,7 +425,7 @@ export interface EditWarranty {
   id: number,
   description: string,
   appointmentDate: Date,
-  warrantyDate: string | null,
+  warrantyDate: Date | null,
   status: string,
   sale: string | undefined,
   technician: string | undefined,
@@ -388,7 +438,7 @@ export interface WarrantyById {
   createDate: Date,
   creator: string,
   appointmentDate: Date,
-  warrantyDate: Date, 
+  warrantyDate: Date,
   status: string,
   sale: string | undefined,
   technician: string | undefined,
