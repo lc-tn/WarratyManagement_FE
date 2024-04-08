@@ -1,0 +1,136 @@
+<div class="all">
+    <app-home></app-home>
+    <div class="right_side">
+        <div class="back" >
+            <i class="pi pi-angle-left" style="font-size: 1.2rem"></i>
+            <a (click)="back()">Quay lại</a>
+        </div>
+        <p>Tiếp nhận phiếu bảo hành</p>
+        <div class="info">
+            <div class="list">
+                <!-- <div class="search" pInputText>
+                <i class="pi pi-search"></i>
+                <input type="text" placeholder="Mã phiếu bảo hành" />
+            </div> -->
+                <form [formGroup]="warrantyEditForm">
+                    <table>
+                        <div formArrayName="warranties">
+                            <div *ngFor="let warranty of warranties.controls; let i = index" [formGroupName]="i">
+                                <div class="warranty_list" (click)="GetInfo(warranty, i)"
+                                    [ngStyle]="{'background-color': i === warrantyIndex ? 'rgba(86,100,209,255)' : ''}">
+                                    <tbody>
+                                        <tr>
+                                            <td><span>Mã phiếu bảo hành</span></td>
+                                            <td><span class="content">{{warranty.value.id}}</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td><span>Ngày tạo</span></td>
+                                            <td><span class="content">{{warranty.value.createDate | date:'dd/MM/yyy h:mma'}}</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td><span>Tên khách hàng</span></td>
+                                            <td><span class="content">{{warranty.value.customerName}}</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td><span>Trạng thái</span></td>
+                                            <td><span class="content">{{warranty.value.status}}</span></td>
+                                        </tr>
+                                    </tbody>
+                                </div>
+                            </div>
+                        </div>
+                    </table>
+                    <p-paginator  [rows]="5" [totalRecords]="totalWarranty" (onPageChange)="WarrantyPageChange($event)"
+                                 [showFirstLastIcon]="false" [style]="{'padding' : '0'}" [rowsPerPageOptions]="[5, 10, 20, 50]"></p-paginator>
+                </form>
+            </div>
+            <div class="detail">
+                <div *ngIf="warrantyById" class="detail_header">
+                    <!-- (activeIndexChange)="onActiveIndexChange($event)" -->
+                    <!-- <div class="status">
+                        <p-steps [model]="status" [readonly]="true" [activeIndex]="stepIndex"
+                            [style]="{'margin-top': '10px'}"></p-steps>
+                    </div> -->
+                    <form #editForm="ngForm">
+                        <div class="detail_info">
+                            <table class="detail_ticket">
+                                <tr>
+                                    <td>Mã PBH</td>
+                                    <td><input pInputText readonly class="p-inputtext-sm" [(ngModel)]="warrantyById.id"
+                                            name="warrantyId"></td>
+                                </tr>
+                                <tr>
+                                    <td>Người tạo</td>
+                                    <td><span>{{ warrantyById.creator }}</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Người tiếp nhận</td>
+                                    <td><span>{{ warrantyById.sale }}</span></td>
+                                </tr>
+                            </table>
+
+                            <table class="detail_customer">
+                                <tr>
+                                    <td>Tên KH</td>
+                                    <td><input type="text" pInputText readonly class="p-inputtext-sm"
+                                            [(ngModel)]="warrantyById.customerName" name="customerName">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Thời gian tạo</td>
+                                    <td><span>{{ warrantyById.createDate | date:'dd/MM/yyyy h:mma' }}</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Ngày hẹn</td>
+                                    <td><span>{{ warrantyById.appointmentDate | date:'dd/MM/yyyy' }}</span></td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="description">
+                            Mô tả
+                            <textarea rows="5" cols="30" pInputTextarea [value]="warrantyById.description" style="margin-left: 10px;"
+                                [disabled]="disabled" [(ngModel)]="warrantyDescription" name="description"></textarea>
+                        </div>
+
+                        <div class="device">
+                            <p-table [value]="devices" [tableStyle]="{ 'margin-top': '20px' }">
+                                <ng-template pTemplate="header">
+                                    <tr>
+
+                                        <th>Serial number</th>
+                                        <th>Tên thiết bị</th>
+                                        <th>Mô tả</th>
+                                        <th>Tình trạng bảo hành</th>
+                                        <th>Kết quả xử lý</th>
+                                        <th *ngIf="this.checkReplacement">Thiết bị thay thế</th>
+                                        <th *ngIf="this.checkReason">Lý do</th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-i="rowIndex" let-device>
+                                    <tr>
+
+                                        <td><span>{{ device.id }}</span></td>
+                                        <td><span>{{ device.name }}</span></td>
+                                        <td><span>{{ device.description }}</span></td>
+                                        <td><span>{{ device.status }}</span></td>
+                                        <td><span>{{ device.result }}</span></td>
+                                        <td *ngIf="device.replacementDevice"><span>{{ device.replacementDevice }}</span>
+                                        </td>
+                                        <td *ngIf="device.reason"><span>{{ device.reason }}</span></td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+
+
+                        </div>
+                        <div class="button">
+                            <p-toast></p-toast>
+                            <!-- <p-button *ngIf="role != 'Customer'" label="Sửa" (onClick)="editWarrantyTicket()"></p-button> -->
+                            <p-button label="Tiếp nhận" severity="info" (onClick)="editWarrantyTicket()"></p-button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

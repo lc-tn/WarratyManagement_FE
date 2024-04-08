@@ -1,0 +1,197 @@
+.all {
+  display: flex;
+  background-color: #f0f5f8;
+}
+
+.back {
+  display: flex;
+  align-items: center;
+
+  a {
+    font-size: medium;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+}
+
+.right_side {
+  padding: 15px;
+  margin: 15px;
+  background-color: white;
+  width: 100%;
+  border-radius: 5px;
+}
+
+// .list {
+//   width: 35%;
+// }
+p {
+  font-weight: bold;
+  text-align: center;
+  font-size: large;
+  color: #4895dc;
+}
+
+.detail {
+  width: 65%;
+}
+
+.info {
+  display: flex;
+}
+
+.search {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  border: 1px solid rgb(213, 212, 212);
+  padding: 5px 10px;
+  border-radius: 10px;
+  width: 90%;
+
+  input {
+    padding: 5px;
+    margin-left: 10px;
+    border: none;
+    width: 100%;
+  }
+
+  input:focus {
+    outline: none;
+  }
+
+  input::placeholder {
+    color: #bababa;
+  }
+
+  i {
+    align-items: center;
+  }
+}
+
+.warranty_list {
+  font-size: small;
+  display: flex;
+  border: 2px solid #c4e2fe;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+span {
+  border: none;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-right: 10px;
+  color: #87bef2;
+  font-weight: 550;
+}
+
+
+.p-inputtext-sm {
+  border: none;
+  text-align: right;
+  justify-content: right;
+  margin-right: 10px;
+  color: #87bef2;
+  // font-weight: 550;
+  width: 100%;
+}
+
+.detail {
+  margin-left: 20px;
+}
+
+.detail_status {
+  display: flex;
+  margin: 20px 0;
+  justify-content: space-between;
+  align-items: center;
+
+  h4 {
+    font-size: small;
+    font-weight: bold;
+    color: rgb(66, 66, 66);
+    margin: 0;
+  }
+
+  span {
+    color: rgb(123, 123, 123);
+    margin: 0;
+    // align-items: center;
+  }
+}
+
+.detail_info {
+  margin-top: 30px;
+  display: flex;
+  justify-content: space-around;
+
+  td {
+    padding: 10px;
+  }
+}
+
+.description {
+  p {
+    margin: 0 10px 0 13px;
+  }
+
+  display: flex;
+  align-items: center;
+
+  textarea {
+    border: 1px solid #d1d5db;
+    width: 88%;
+    border-radius: 6px;
+    padding: 10px;
+  }
+}
+
+.active {
+  background-color: #2e4ea7;
+}
+
+.add_warranty {
+  tbody {
+    td {
+      padding: 10px;
+
+      span {
+        font-weight: bold;
+      }
+
+      input[type="text"],
+      textarea {
+        padding: 8px;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        resize: vertical;
+      }
+    }
+  }
+}
+
+.button {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+// ::ng-deep .p-dropdown .p-dropdown-filter-icon {
+//   height: 100%;
+//   align-items: center;
+//   top: 0;
+// }
+
+// .p-datatable-wrapper{
+//   width: 100%;
+//   display: flex;
+//   justify-content: center;
+//   p-table{
+//     width: 100%;
+
+//   }
+// }

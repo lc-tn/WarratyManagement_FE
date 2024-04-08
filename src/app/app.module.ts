@@ -39,6 +39,10 @@ import { PaginatorModule } from 'primeng/paginator';
 import { ReportComponent } from './report/report.component';
 import { ChartModule } from 'primeng/chart';
 import { PickListModule } from 'primeng/picklist';
+import { DragDropModule } from 'primeng/dragdrop';
+import { ListboxModule } from 'primeng/listbox';
+import { CheckboxModule } from 'primeng/checkbox';
+import { ReceiveWarrantyComponent } from './receive-warranty/receive-warranty.component';
 
 @NgModule({
   declarations: [
@@ -53,6 +57,7 @@ import { PickListModule } from 'primeng/picklist';
     DeviceComponent,
     CreateWarrantyComponent,
     ReportComponent,
+    ReceiveWarrantyComponent,
     // PBadgeComponent
   ],
   imports: [
@@ -88,7 +93,10 @@ import { PickListModule } from 'primeng/picklist';
     DialogModule,
     PaginatorModule,
     ChartModule,
-    PickListModule
+    PickListModule,
+    DragDropModule,
+    ListboxModule,
+    CheckboxModule
   ],
   providers: [
     {

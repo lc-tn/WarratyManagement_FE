@@ -49,7 +49,7 @@ export class LoginComponentComponent {
         const decoded= helper.decodeToken(res);
         localStorage.setItem('role', decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role']);
         localStorage.setItem('userId', decoded.UserId);
-        this.router.navigateByUrl('/home');
+        this.router.navigateByUrl('/warranty');
       }
       else {
         alert("Login unsuccessfully");

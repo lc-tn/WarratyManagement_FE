@@ -11,6 +11,7 @@ import { AuthGuardService } from './Service/auth-guard.service';
 import { DeviceComponent } from './device/device.component';
 import { CreateWarrantyComponent } from './create-warranty/create-warranty.component';
 import { ReportComponent } from './report/report.component';
+import { ReceiveWarrantyComponent } from './receive-warranty/receive-warranty.component';
 
 const routes: Routes = [
   {path: '', redirectTo: '/login', pathMatch: 'full'},
@@ -24,6 +25,7 @@ const routes: Routes = [
   {path: 'permission', component: PermissionComponent, canActivate: [AuthGuardService]},
   {path: 'device', component: DeviceComponent, canActivate: [AuthGuardService]},
   {path: 'report', component: ReportComponent, canActivate: [AuthGuardService]},
+  {path: 'warranty/receive', component: ReceiveWarrantyComponent, canActivate: [AuthGuardService]},
 ];
 
 @NgModule({

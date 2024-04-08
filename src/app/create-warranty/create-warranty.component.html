@@ -32,7 +32,7 @@
                         </p-dropdown>
                     </td>
                 </tr>
-                <tr>
+                <!-- <tr>
                     <td><span>Ngày hẹn bảo hành</span></td>
                     <td>
                         <form>
@@ -40,7 +40,7 @@
                                 [(ngModel)]="createAppointmentDate" name="appointmentDate"></p-calendar>
                         </form>
                     </td>
-                </tr>
+                </tr> -->
                 <tr>
                     <td><span>Mô tả</span></td>
                     <td><textarea rows="5" cols="30" [required]="true" [(ngModel)]="createDescription" name="description"
@@ -50,7 +50,7 @@
                     <td><span>Tên thiết bị</span></td>
                     <td>
                         <p-multiSelect [options]="deviceOptions" [(ngModel)]="selectedDevices"
-                            name="devices" optionLabel="name"></p-multiSelect>
+                            name="devices" optionLabel="nameAndId"></p-multiSelect>
                     </td>
                 </tr>
             </tbody>

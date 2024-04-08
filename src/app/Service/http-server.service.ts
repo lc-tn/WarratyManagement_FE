@@ -5,7 +5,7 @@ import { WarrantyById, Warranty, WarrantyHistory, EditWarranty, WarrantyDeviceHi
 import { User } from '../user/user.component';
 import { Role } from '../role/role.component';
 import { Permission, RolePermission } from '../permission/permission.component';
-import { Device } from '../device/device.component';
+import { Category, Device, ReplacementDevice } from '../device/device.component';
 import { CreateWarranty } from '../create-warranty/create-warranty.component';
 
 @Injectable({
@@ -22,7 +22,7 @@ export class HttpServerService {
   }
   constructor(private httpClient: HttpClient) { }
 
-  //USER
+  //************************************************ USER ************************************************
   public getUser(): Observable<User[]> {
     const url = `${this.REST_API_SERVER}/User`;
     return this.httpClient.get<User[]>(url, this.httpOptions);
@@ -37,8 +37,16 @@ export class HttpServerService {
     const url = `${this.REST_API_SERVER}/User`;
     return this.httpClient.put<User>(url, user, this.httpOptions);
   }
+  /******************************************************************************************************* */
 
-  //DEVICE
+  /************************************************ CATEGORY ******************************************** */
+  public getAllCategory(): Observable<Category[]> {
+    const url = `${this.REST_API_SERVER}/Category`;
+    return this.httpClient.get<Category[]>(url, this.httpOptions);
+  }
+  /****************************************************************************************************** */
+
+  //********************************************* DEVICE ************************************************
   public createDevice(device: Device): Observable<Device>{
     const url = `${this.REST_API_SERVER}/Device`;
     return this.httpClient.post<Device>(url, device, this.httpOptions);
@@ -59,14 +67,35 @@ export class HttpServerService {
     return this.httpClient.get<Device[]>(url, this.httpOptions);
   }
 
+  public getReplacementDevices(categoryId: any): Observable<Device[]> {
+    const url = `${this.REST_API_SERVER}/Device/replacement-device/${categoryId}`;
+    return this.httpClient.get<Device[]>(url, this.httpOptions);
+  }
+
+  public addReplacementDevice(replacementDevice: ReplacementDevice): Observable<ReplacementDevice> {
+    const url = `${this.REST_API_SERVER}/Device`;
+    return this.httpClient.put<ReplacementDevice>(url, replacementDevice, this.httpOptions);
+  }
+
+  public editDeviceStatus(status: string, deviceId: number): Observable<any> {
+    const url = `${this.REST_API_SERVER}/Device/edit/${deviceId}/${status}`;
+    return this.httpClient.put<any>(url, status, this.httpOptions);
+  }
+  //****************************************************************************************************** */
+
   //********************************** WARRANTY **********************************************************
   public createWarranty(warranty: CreateWarranty): Observable<CreateWarranty>{
     const url = `${this.REST_API_SERVER}/Warranty`;
     return this.httpClient.post<CreateWarranty>(url, warranty, this.httpOptions);
   }
 
-  public getWarrantyPagination(pageNumber: number): Observable<Warranty[]> {
-    const url = `${this.REST_API_SERVER}/Warranty/paging/${pageNumber}`;
+  public getWarrantyPagination(userId: string, pageNumber: number, pageSize: number): Observable<Warranty[]> {
+    const url = `${this.REST_API_SERVER}/Warranty/${userId}/${pageNumber}/${pageSize}`;
+    return this.httpClient.get<Warranty[]>(url, this.httpOptions);
+  }
+
+  public getNewWarranty(userId: string, pageNumber: number, pageSize: number): Observable<Warranty[]> {
+    const url = `${this.REST_API_SERVER}/Warranty/new/${userId}/${pageNumber}/${pageSize}`;
     return this.httpClient.get<Warranty[]>(url, this.httpOptions);
   }
 
@@ -77,6 +106,16 @@ export class HttpServerService {
 
   public getTotalWarranty(): Observable<number> {
     const url = `${this.REST_API_SERVER}/Warranty/total`;
+    return this.httpClient.get<number>(url, this.httpOptions);
+  }
+
+  public getTotalWarrantyByUser(userId: number): Observable<number> {
+    const url = `${this.REST_API_SERVER}/Warranty/total/${userId}`;
+    return this.httpClient.get<number>(url, this.httpOptions);
+  }
+
+  public getTotalNewWarranty(userId: number): Observable<number> {
+    const url = `${this.REST_API_SERVER}/Warranty/total-new/${userId}`;
     return this.httpClient.get<number>(url, this.httpOptions);
   }
 
@@ -95,8 +134,8 @@ export class HttpServerService {
     return this.httpClient.get<Warranty[]>(url, this.httpOptions);
   }
 
-  public getWarrantyByCustomer(customerId: string): Observable<Warranty[]> {
-    const url = `${this.REST_API_SERVER}/Warranty/customer/${customerId}`;
+  public getWarrantyByUser(userId: string): Observable<Warranty[]> {
+    const url = `${this.REST_API_SERVER}/Warranty/user/${userId}`;
     return this.httpClient.get<Warranty[]>(url, this.httpOptions);
   }
   //**************************************************************************************************** */
@@ -132,8 +171,8 @@ export class HttpServerService {
   }
 
   //WARRANTY_HISTORY
-  public getWarrantyHistory(warrantyId: number, pageNumber: number): Observable<WarrantyHistory[]> {
-    const url = `${this.REST_API_SERVER}/WarrantyHistory/${warrantyId}/${pageNumber}`;
+  public getWarrantyHistory(warrantyId: number, pageNumber: number, pageSize: number): Observable<WarrantyHistory[]> {
+    const url = `${this.REST_API_SERVER}/WarrantyHistory/${warrantyId}/${pageNumber}/${pageSize}`;
     return this.httpClient.get<WarrantyHistory[]>(url, this.httpOptions);
   }
 
@@ -148,8 +187,8 @@ export class HttpServerService {
   }
 
   //********************************* WARRANTY_DEVICE_HISTORY ************************************************
-  public getWarrantyDeviceHistory(warrantyId: number, pageNumber: number): Observable<WarrantyDeviceHistory[]> {
-    const url = `${this.REST_API_SERVER}/WarrantyDeviceHistory/${warrantyId}/${pageNumber}`;
+  public getWarrantyDeviceHistory(warrantyId: number, pageNumber: number, pageSize: number): Observable<WarrantyDeviceHistory[]> {
+    const url = `${this.REST_API_SERVER}/WarrantyDeviceHistory/${warrantyId}/${pageNumber}/${pageSize}`;
     return this.httpClient.get<WarrantyDeviceHistory[]>(url, this.httpOptions);
   }
 
@@ -157,12 +196,24 @@ export class HttpServerService {
     const url = `${this.REST_API_SERVER}/WarrantyDeviceHistory/total/${warrantyId}`;
     return this.httpClient.get<number>(url, this.httpOptions);
   }
+
+  public addWarrantyReplacementDeviceHistory(replacementDevice: ReplacementDevice, 
+    warrantyId: number, deviceId: number): Observable<ReplacementDevice> {
+const url = `${this.REST_API_SERVER}/WarrantyDeviceHistory/replacement-device/${warrantyId}/${deviceId}`;
+return this.httpClient.put<ReplacementDevice>(url, replacementDevice, this.httpOptions);
+}
   //************************************************************************************************************* */
 
   //****************************************** WARRANTY_DEVICE ***********************************************
   public editWarrantyDevice(warrantyDevice: WarrantyDevice): Observable<WarrantyDevice>{
     const url = `${this.REST_API_SERVER}/WarrantyDevice`;
     return this.httpClient.put<WarrantyDevice>(url, warrantyDevice, this.httpOptions);
+  }
+
+  public addWarrantyReplacementDevice(replacementDevice: ReplacementDevice, 
+                                warrantyId: number, deviceId: number): Observable<ReplacementDevice> {
+    const url = `${this.REST_API_SERVER}/WarrantyDevice/replacement-device/${warrantyId}/${deviceId}`;
+    return this.httpClient.put<ReplacementDevice>(url, replacementDevice, this.httpOptions);
   }
 
   public addWarrantyDeviceHistory(warrantyDeviceHistory: WarrantyDevice): Observable<WarrantyDevice>{

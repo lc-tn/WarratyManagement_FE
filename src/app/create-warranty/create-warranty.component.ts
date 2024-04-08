@@ -39,17 +39,20 @@ export class CreateWarrantyComponent {
   GetDeviceByUser(customer: User) {
     this.deviceOptions = [];
     this.selectedDevices = [];
-    console.log(this.selectedDevices)
     this.httpService.getDeviceByUser(customer.id).subscribe((data) => {
       if (data.at(0)) {
         this.deviceOptions = data;
+        this.deviceOptions = this.deviceOptions.map(device => ({
+          ...device,
+          nameAndId: `${device.name} (${device.id})`
+        }));
       }
       else {
         this.deviceOptions = [];
         this.selectedDevices = [];
       }
     });
-  }
+}
 
   public async createWarrantyTicket() {
     this.deviceWarranties = [];
@@ -59,13 +62,10 @@ export class CreateWarrantyComponent {
     this.createWarranty = {
       id: 0,
       description: this.createDescription === undefined ? '' : this.createDescription,
-      appointmentDate: this.createAppointmentDate,
       creator: localStorage.getItem("username")?.toString(),
       device: this.deviceWarranties,
       customerId: this.selectedCustomer?.id
     };
-
-    console.log(this.createWarranty)
 
     this.httpService.createWarranty(this.createWarranty).subscribe(response => {
       this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Create successfully!' });
@@ -88,6 +88,5 @@ export interface CreateWarranty {
   description: string,
   device: DeviceWarranty[],
   customerId: string | null,
-  creator: string | undefined,
-  appointmentDate: Date
+  creator: string | undefined
 }

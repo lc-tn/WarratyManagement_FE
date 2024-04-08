@@ -1,15 +1,16 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { HttpServerService } from '../Service/http-server.service';
 import { MessageService } from 'primeng/api';
 import { Warranty } from '../warranty/warranty.component';
 import * as XLSX from 'xlsx';
+import { PrimeNGConfig } from 'primeng/api';
 
 @Component({
   selector: 'app-report',
   templateUrl: './report.component.html',
   styleUrl: './report.component.scss'
 })
-export class ReportComponent {
+export class ReportComponent implements OnInit {
   pieData: any;
   pieOptions: any;
   stackedData: any;
@@ -41,10 +42,12 @@ export class ReportComponent {
   userId: any = localStorage.getItem('userId');
 
   constructor(private httpService: HttpServerService,
-    private messageService: MessageService) {
+    private messageService: MessageService,
+    private primengConfig: PrimeNGConfig) {
   }
 
   ngOnInit() {
+    this.primengConfig.ripple = true;
     if (this.role == 'Admin') {
       this.httpService.getWarranties().subscribe(data => {
         this.warranties = data;
@@ -54,7 +57,7 @@ export class ReportComponent {
       });
     }
     if (this.role == 'Customer'){
-      this.httpService.getWarrantyByCustomer(this.userId).subscribe(data => {
+      this.httpService.getWarrantyByUser(this.userId).subscribe(data => {
         this.warranties = data;
         this.filterWarranties = data;
         this.statusWarranties = data;

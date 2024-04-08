@@ -27,23 +27,54 @@
 
             </div>
 
-            <p-table [value]="deviceList" [tableStyle]="{ 'min-width': '50rem'}">
+            <p-table [value]="categories" [tableStyle]="{ 'min-width': '50rem'}">
                 <ng-template pTemplate="header">
                     <tr>
-                        <th>Id</th>
-                        <th>Name</th>
-                        <th>Description</th>
-                        <th>Status</th>
+                        <th>Tên thiết bị</th>
+                        <th>Thiết bị có sẵn</th>
+                        <th>Thiết bị đã bán</th>
                     </tr>
                 </ng-template>
-                <ng-template pTemplate="body" let-device>
+                <ng-template pTemplate="body" let-category let-i="rowIndex">
                     <tr>
-                        <td>{{ device.id }}</td>
-                        <td>{{ device.name }}</td>
-                        <td>{{ device.description }}</td>
-                        <td>{{ device.status }}</td>
+                        <td>{{ category.name }}</td>
+                        <td style="cursor: pointer;">
+                            <p *ngIf="availableDeviceQuantities[i]" (click)="showDialog(category.id, 'Available')">
+                                {{ availableDeviceQuantities[i] }}</p>
+                            <p *ngIf="!availableDeviceQuantities[i]">0</p>
+                        </td>
+                        <td style="cursor: pointer;">
+                            <p *ngIf="soldDeviceQuantity[i]" (click)="showDialog(category.id, '')">
+                                {{ soldDeviceQuantity[i] }}</p>
+                            <p *ngIf="!soldDeviceQuantity[i]">0</p>
+                        </td>
                     </tr>
                 </ng-template>
             </p-table>
+
+            <p-dialog header="" [(visible)]="visible">
+                <p-table [value]="devicePopup" [tableStyle]="{ 'min-width': '50rem'}">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>Mã thiết bị</th>
+                            <th>Tên thiết bị</th>
+                            <th *ngIf="devicePopup[0].userName">Khách sở hữu</th>
+                            <th *ngIf="devicePopup[0].userName">Thiết bị thay thế</th>
+                            <th *ngIf="devicePopup[0].userName">Ngày kích hoạt</th>
+                            <th *ngIf="devicePopup[0].userName">Hạn bảo hành</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-device let-i="rowIndex">
+                        <tr>
+                            <td>{{ device.id }}</td>
+                            <td>{{ device.name }}</td>
+                            <td *ngIf="device.userName">{{ device.userName }}</td>
+                            <td *ngIf="device.userName">{{ device.replacementDevice }}</td>
+                            <td *ngIf="device.userName">{{ device.activationDate }}</td>
+                            <td *ngIf="device.userName">{{ device.warrantyPeriod }}</td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </p-dialog>
         </div>
 </div>
