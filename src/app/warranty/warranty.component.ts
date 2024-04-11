@@ -6,6 +6,7 @@ import { User } from '../user/user.component';
 import { Device, ReplacementDevice } from '../device/device.component';
 import { Router } from '@angular/router';
 import { PrimeNGConfig } from 'primeng/api';
+import { error } from 'console';
 
 @Component({
   selector: 'app-warranty',
@@ -200,7 +201,48 @@ export class WarrantyComponent implements OnInit {
           this.messageService.add({ severity: 'info', summary: 'Info', detail: 'Không có gì thay đổi' });
         }
         else {
-          if ((this.warrantyDevice.status == 'Hoàn thành' || this.warrantyDevice.status == 'Từ chối') &&
+          if (this.warrantyDevice.result == 'Thay thế') {
+            if (this.replacementDevices.length == 0) {
+              this.messageService.add({ severity: 'info', summary: 'Info', detail: 'Không còn thiết bị thay thế' });
+            }
+            else {
+              if ((this.warrantyDevice.status == 'Hoàn thành' || this.warrantyDevice.status == 'Từ chối') &&
+                this.warrantyDevice.deviceId == device.id) {
+                this.disabledDevice[index] = true;
+              }
+              // if (this.warrantyDevice.status == 'Hoàn thành' && this.warrantyDevice.deviceId == device.id)
+              //   this.warrantyDevice.result = 'Đã ' + this.warrantyDevice.result;
+
+              if (this.warrantyDevice.status == 'Hoàn thành') {
+                this.warrantyDevice.reason = null;
+              }
+
+              if (this.warrantyDevice.status == 'Từ chối') {
+                this.warrantyDevice.result = null;
+              }
+
+              if (this.refuse) {
+                this.warrantyDevice.status = 'Đang xử lý';
+              }
+
+              this.httpService.editWarrantyDevice(this.warrantyDevice).subscribe(response => {
+                this.httpService.addWarrantyDeviceHistory(this.warrantyDevice).subscribe(response => {
+                  this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Sửa thành công' });
+                  if (this.warrantyDevice.deviceId == device.id && this.warrantyDevice.status != device.status)
+                    this.editWarrantyTicket();
+                  // this.editWarrantyTicket();
+                  this.editDeviceVisibility = false;
+                  this.GetInfo(this.warrantyDevice, this.warrantyIndex);
+                }, error => {
+                  this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Đã có lỗi xảy ra!' });
+                })
+              }, error => {
+                this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Đã có lỗi xảy ra!' });
+              });
+            }
+          }
+          else {
+            if ((this.warrantyDevice.status == 'Hoàn thành' || this.warrantyDevice.status == 'Từ chối') &&
             this.warrantyDevice.deviceId == device.id) {
             this.disabledDevice[index] = true;
           }
@@ -236,7 +278,6 @@ export class WarrantyComponent implements OnInit {
               this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Sửa thành công' });
               if (this.warrantyDevice.deviceId == device.id && this.warrantyDevice.status != device.status)
                 this.editWarrantyTicket();
-              // this.editWarrantyTicket();
               this.editDeviceVisibility = false;
               this.GetInfo(this.warrantyDevice, this.warrantyIndex);
             }, error => {
@@ -245,6 +286,7 @@ export class WarrantyComponent implements OnInit {
           }, error => {
             this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Đã có lỗi xảy ra!' });
           });
+          }
         }
       }
     })
@@ -304,18 +346,43 @@ export class WarrantyComponent implements OnInit {
     }
     if (status == 'Hoàn thành') {
       this.devices.forEach(device => {
-        if (device.status == 'Hoàn thành' && device.result == 'Thay thế'){
+        if (device.status == 'Hoàn thành' && device.result == 'Thay thế') {
+          // this.httpService.editDeviceStatus("Thay thế", device.id).subscribe(response => {
+          //   this.httpService.getReplacementDevices(device.categoryId).subscribe(data => {
+          //     this.replacementDevices = data;
+          //   }, error => {
+        
+          //   })
+          // })
+          
           this.categoryId = device.categoryId;
           this.deviceId = device.id;
           this.deviceDescription = device.description;
           this.deviceStatus = device.status;
           this.deviceResult = device.result;
           this.reason = device.reason;
+          // this.getReplacementDevice(device.categoryId);
           this.AddReplacementDevice();
+
+          this.httpService.editDeviceStatus("Thay thế", device.id).subscribe(response => {
+          })
+        }
+
+        if (device.status == 'Hoàn thành' && device.result == 'Sửa chữa') {
+          this.httpService.editDeviceStatus("Đang sử dụng", device.id).subscribe(response => {
+          })
         }
       })
       // console.log(this.devices)
     }
+  }
+
+  getReplacementDevice(categoryId: number){
+    this.httpService.getReplacementDevices(categoryId).subscribe(data => {
+      this.replacementDevices = data;
+    }, error => {
+
+    })
   }
 
   selectItem(item: any) {
@@ -445,14 +512,18 @@ export class WarrantyComponent implements OnInit {
       this.selectedTechnician = this.warrantyById.technicianId;
 
       this.devices.forEach((device, index) => {
-        if ((device.status === 'Hoàn thành' || device.status === 'Từ chối') &&
-          (this.warrantyById.status !== 'Chờ xác nhận' && this.warrantyById.status !== 'Đang xử lý') &&
-          this.role == 'Technician')
-          this.disabledDevice[index] = true;
-        else
-          this.disabledDevice[index] = false;
+        // if ((device.status === 'Hoàn thành' || device.status === 'Từ chối') &&
+        //   (this.warrantyById.status !== 'Chờ xác nhận' && this.warrantyById.status !== 'Đang xử lý') &&
+        //   this.role != 'Technician')
+        //   this.disabledDevice[index] = true;
+        // else
+        //   this.disabledDevice[index] = false;
 
-        if (this.role == 'Admin') {
+        console.log(this.role)
+        if (device.status === 'Hoàn thành' || device.status === 'Từ chối') {
+          this.disabledDevice[index] = true;
+        }
+        else{
           this.disabledDevice[index] = false;
         }
 
@@ -463,10 +534,16 @@ export class WarrantyComponent implements OnInit {
           this.checkReplacement = true;
       })
 
-      if (this.warrantyById.status == 'Hoàn thành' || this.role == 'Customer') {
+      if (this.warrantyById.status == 'Hoàn thành' || (this.role != 'Receiver' && this.role != 'Admin')) {
         this.disabled = true;
-        this.disabledDevice = this.disabledDevice.map(() => true);
+        
       }
+
+      if (this.warrantyById.status == 'Hoàn thành' || (this.role != 'Technician' && this.role != 'Admin')) {
+        this.disabledDevice = this.disabledDevice.map(() => true);
+        
+      }
+      
 
       this.stepIndex = this.warrantyById.status === 'Chờ xác nhận' ? 0 :
         this.warrantyById.status === 'Đang xử lý' ? 1 :
@@ -498,6 +575,7 @@ export class WarrantyComponent implements OnInit {
     this.httpService.getTotalWarrantyDeviceHistory(warranty.id).subscribe((data) => {
       this.totalWarrantyDeviceHistory = data;
     })
+    console.log(this.disabledDevice)
   }
 
   onActiveIndexChange(event: number) {
@@ -559,48 +637,49 @@ export class WarrantyComponent implements OnInit {
   AddReplacementDevice() {
     this.httpService.getReplacementDevices(this.categoryId).subscribe(data => {
       this.replacementDevices = data;
-    })
-    if (this.replacementDevices.length > 0) {
-      
-      this.replacementDevice =
-      {
-        id: this.deviceId,
-        replacementDevice: this.replacementDevices[0].id,
-        userId: this.warrantyById.customerId,
-        modifier: localStorage.getItem("username")?.toString()
-      };
-
-      this.warrantyDevice = {
-        warrantyId: this.warrantyById.id,
-        deviceId: this.deviceId,
-        description: this.deviceDescription,
-        status: this.deviceStatus,
-        result: this.deviceResult,
-        modifier: localStorage.getItem("username")?.toString(),
-        replacementDevice: this.replacementDevices[0].id,
-        reason: this.reason
-      };
-
-      this.httpService.addReplacementDevice(this.replacementDevice).subscribe(data => {
-        this.httpService.addWarrantyReplacementDevice(this.replacementDevice,
-          this.warrantyById.id, this.deviceId).subscribe(response => {
-            this.httpService.addWarrantyDeviceHistory(this.warrantyDevice).subscribe(response => {
-              this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Thay thế thiết bị thành công!' });
-              this.editDeviceVisibility = false;
-              this.GetInfo(this.warrantyDevice, this.warrantyIndex);
+      if (this.replacementDevices.length > 0) {
+        this.replacementDevice =
+        {
+          id: this.deviceId,
+          replacementDevice: this.replacementDevices[0].id,
+          userId: this.warrantyById.customerId,
+          modifier: localStorage.getItem("username")?.toString()
+        };
+  
+        this.warrantyDevice = {
+          warrantyId: this.warrantyById.id,
+          deviceId: this.deviceId,
+          description: this.deviceDescription,
+          status: this.deviceStatus,
+          result: this.deviceResult,
+          modifier: localStorage.getItem("username")?.toString(),
+          replacementDevice: this.replacementDevices[0].id,
+          reason: this.reason
+        };
+  
+        this.httpService.addReplacementDevice(this.replacementDevice).subscribe(data => {
+          this.httpService.addWarrantyReplacementDevice(this.replacementDevice,
+            this.warrantyById.id, this.deviceId).subscribe(response => {
+              this.httpService.addWarrantyDeviceHistory(this.warrantyDevice).subscribe(response => {
+                this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Thay thế thiết bị thành công!' });
+                this.editDeviceVisibility = false;
+                this.GetInfo(this.warrantyDevice, this.warrantyIndex);
+              }, error => {
+                this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Something went wrong!' });
+              })
             }, error => {
               this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Something went wrong!' });
             })
-          }, error => {
-            this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Something went wrong!' });
-          })
-      }, error => {
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Đã có lỗi xảy ra!' });
-      })
-    }
-    else {
-      this.messageService.add({ severity: 'info', summary: 'Infor', detail: 'Không còn hàng để thay thế!' });
-    }
+        }, error => {
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Đã có lỗi xảy ra!' });
+        })
+      }
+      else {
+        this.messageService.add({ severity: 'info', summary: 'Infor', detail: 'Không còn hàng để thay thế!' });
+      }
+    }, error => {
+
+    })
   }
 }
 

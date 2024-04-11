@@ -14,7 +14,7 @@ import { EditWarranty } from '../warranty/warranty.component';
 export class CreateWarrantyComponent {
 
   customers: User[] = [];
-  selectedCustomer!: User;
+  selectedCustomer: User | null | undefined;
 
   deviceOptions: Device[] = [];
   selectedDevices!: DeviceWarranty[];
@@ -25,7 +25,7 @@ export class CreateWarrantyComponent {
 
   createWarranty!: CreateWarranty;
   editWarranty!: EditWarranty;
-  
+
   constructor(private httpService: HttpServerService,
     private messageService: MessageService, private router: Router,) {
   }
@@ -52,7 +52,7 @@ export class CreateWarrantyComponent {
         this.selectedDevices = [];
       }
     });
-}
+  }
 
   public async createWarrantyTicket() {
     this.deviceWarranties = [];
@@ -64,21 +64,42 @@ export class CreateWarrantyComponent {
       description: this.createDescription === undefined ? '' : this.createDescription,
       creator: localStorage.getItem("username")?.toString(),
       device: this.deviceWarranties,
-      customerId: this.selectedCustomer?.id
+      customerId: this.selectedCustomer!.id
     };
+
+    // var check = true;
+    // this.deviceOptions.forEach(device => {
+    //   this.deviceWarranties.forEach(deviceWarranty => {
+    //     if (device.id == deviceWarranty.id) {
+    //       if (device.status == 'Đang bảo hành'){
+    //         check = false;
+    //       }
+    //       else{
+    //         this.messageService.add({ severity: 'Info', summary: 'Thông báo', detail: `${device.name}(${device.id}) đang được bảo hành!` });
+    //       }
+    //     }
+    //   })
+    // })
 
     this.httpService.createWarranty(this.createWarranty).subscribe(response => {
       this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Create successfully!' });
+      this.deviceOptions = [];
+      this.selectedDevices = [];
+      this.selectedCustomer = null;
     }, error => {
       this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Something went wrong!' });
     });
+    this.deviceWarranties.forEach(device => {
+      this.httpService.editDeviceStatus("Đang bảo hành", device.id).subscribe(response => {
+      })
+    })
   }
 
-  updateDevice(description: string, i: number){
+  updateDevice(description: string, i: number) {
     this.selectedDevices[i].description = description;
   }
 
-  back(){
+  back() {
     this.router.navigateByUrl('/warranty');
   }
 }

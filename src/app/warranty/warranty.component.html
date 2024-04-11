@@ -198,7 +198,7 @@
                                                     <td><span>{{ device.description }}</span></td>
                                                     <td><span>{{ device.status }}</span></td>
                                                     <td><span>{{ device.result }}</span></td>
-                                                    <td *ngIf="device.replacementDevice"><span>{{ device.replacementDevice }}</span></td>
+                                                    <td *ngIf="device.replacementDevice && device.result == 'Thay thế'"><span>{{ device.replacementDevice }}</span></td>
                                                     <td *ngIf="device.reason"><span>{{ device.reason }}</span></td>
                                                 </tr>
                                             </ng-template>
